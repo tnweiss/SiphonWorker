@@ -6,5 +6,5 @@ bool isVariable(std::string &data) {
 
 int variableIndex(std::string &data) {
     std::string indexString = data.substr(0, VARIABLE_PREFIX.length());
-    std::stoi(indexString);
+    return std::stoi(indexString);
 }

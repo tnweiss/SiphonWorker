@@ -4,6 +4,8 @@ ADD_LIBRARY( siphon_common
              filters/filter.h
              variables.cpp 
              variables.h
-             exceptions/parse_exception.hpp)
+             exceptions/parse_exception.hpp
+             models/ParameterParse.h 
+             models/ParameterParse.tpp)
 
 target_include_directories(siphon_common PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
