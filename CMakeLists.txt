@@ -8,9 +8,11 @@ set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR} )
 
 ####### Dependencies ##########
 INCLUDE_DIRECTORIES(
+  /home/tyler/anaconda3/include/python3.8
   third_party/json 
   third_party/boost 
-  third_party/catch2)
+  third_party/catch2
+  )
 
 # Get nholman json
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/third_party/json)
@@ -40,7 +42,8 @@ endif()
 
 # Python 3.8
 find_package(PythonLibs 3.8 REQUIRED)
-include_directories(${PYTHON_INCLUDE_DIRS})
+#include_directories(${PYTHON_INCLUDE_DIRS})
+message(${PYTHON_INCLUDE_DIRS})
 
 
 ########## Include the src subdirectory ##########
