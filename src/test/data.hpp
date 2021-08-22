@@ -1,8 +1,9 @@
 #include <string>
 #include "json.hpp"
 
-#ifndef DATA_H
-#define DATA_H
+#ifndef SIPHON_TEST_DATA_H
+#define SIPHON_TEST_DATA_H
+
 std::string genericData1 = 
 R"(
 {
@@ -15,4 +16,37 @@ R"(
 nlohmann::json getGenericData1() {
     return nlohmann::json::parse(genericData1);
 }
+
+std::string dataModelData =
+        R"(
+{
+    "data_structure": "array",
+    "fields": [
+        {
+            "field_name": "test",
+            "field_type": "INTEGER",
+            "description": "This is a general description"
+        }
+    ]
+}
+        )";
+
+nlohmann::json getDataModelData() {
+    return nlohmann::json::parse(dataModelData);
+}
+
+
+std::string dataModelFieldData =
+        R"(
+{
+    "field_name": "test",
+    "field_type": "STRING",
+    "description": "This is a general description"
+}
+        )";
+
+nlohmann::json getDataModelFieldData() {
+    return nlohmann::json::parse(dataModelFieldData);
+}
+
 #endif

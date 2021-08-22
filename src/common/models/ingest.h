@@ -1,40 +1,39 @@
-#include "json.hpp"
 #include <vector>
 #include <string>
-#include "ParameterParse.h"
+#include "boost/format.hpp"
+#include "nlohmann/json.hpp"
 
-#ifndef INGEST_H
-#define INGEST_H
+#include "parsing/parameter_parse.h"
+#include "siphon_strings.hpp"
+
+#ifndef SIPHON_INGEST_H
+#define SIPHON_INGEST_H
 
 namespace siphon {
-    enum DataStructure (
-        array,
-        object
-    );
-
-    enum SiphonType {
-        string,
-        int
-    };
-
     class DataModelField {
         public:
-            DataModelField(nlohmann::json&);
-            std::string name() {return this.name;};
-            SiphonType type() {return this.type;};
-            bool required() {return this.required;};
-        private:
-            std::string *name;
-            SiphonType *type;
-            bool *required;
+            DataModelField(nlohmann::json& _data): data(_data) {
+                // get the parameters to assure they exist
+                this->name();
+                this->type();
+                this->description();
+            };
 
+            std::string name();
+            SiphonType type();
+            std::string description();
+    private:
+            nlohmann::json& data;
     };
 
     class DataModel {
         public:
-            DataModel(nlohmann::json)
+            DataModel(nlohmann::json&);
             DataStructure dataStructure();
             std::vector<DataModelField> fields();
+        private:
+            std::vector<DataModelField> _fields;
+            DataStructure _data_structure;
     };
 }
 

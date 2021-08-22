@@ -1,9 +1,9 @@
-#ifndef PARSE_EXCEPTION_H
-#define PARSE_EXCEPTION_H
-
 #include <exception>
 #include <string>
 #include "boost/format.hpp"
+
+#ifndef SIPHON_PARSE_EXCEPTION_H
+#define SIPHON_PARSE_EXCEPTION_H
 
 namespace siphon {
     class ParseException: public std::exception
@@ -54,4 +54,4 @@ namespace siphon {
     };
 }
 
-# endif
+#endif
