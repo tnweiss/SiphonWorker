@@ -1,23 +1,30 @@
 #include <string>
-#include "json.hpp"
+#include "nlohmann/json.hpp"
 
 #ifndef SIPHON_TEST_DATA_H
 #define SIPHON_TEST_DATA_H
 
-std::string genericData1 = 
+const nlohmann::json genericData1 =
 R"(
 {
-    "hello": "world",
-    "instantiations": 3
+    "stringField": "Hello World",
+    "intField": 3,
+    "floatField": 3.101,
+    "boolField": true,
+    "unsignedIntField": 100,
+    "enumField": "TEST_PASS",
+    "arrayField": ["hello", "world"]
 }
-)";
+)"_json;
 
 
-nlohmann::json getGenericData1() {
-    return nlohmann::json::parse(genericData1);
-}
+enum TEST_ENUM {
+    TEST_PASS = 1,
+    TEST_FAIL = 2
+};
 
-std::string dataModelData =
+
+const nlohmann::json dataModelData =
         R"(
 {
     "data_structure": "array",
@@ -29,24 +36,16 @@ std::string dataModelData =
         }
     ]
 }
-        )";
-
-nlohmann::json getDataModelData() {
-    return nlohmann::json::parse(dataModelData);
-}
+        )"_json;
 
 
-std::string dataModelFieldData =
+nlohmann::json dataModelFieldData =
         R"(
 {
     "field_name": "test",
     "field_type": "STRING",
     "description": "This is a general description"
 }
-        )";
-
-nlohmann::json getDataModelFieldData() {
-    return nlohmann::json::parse(dataModelFieldData);
-}
+        )"_json;
 
 #endif

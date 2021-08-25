@@ -10,7 +10,7 @@ namespace siphon {
         return this->_data_structure;
     }
 
-    std::vector<DataModelField> DataModel::fields() {
+    std::vector<DataModelField>* DataModel::fields() {
         return this->_fields;
     }
 

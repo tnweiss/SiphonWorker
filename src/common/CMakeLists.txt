@@ -1,7 +1,5 @@
 ADD_LIBRARY( siphon_common
              siphon_strings.hpp
-             models/ingest.h 
-             models/ingest.cpp 
              parsing/parse_exception.hpp
              parsing/parameter_parse.h 
              parsing/parameter_parse.tpp

@@ -12,7 +12,7 @@
 namespace siphon {
     class DataModelField {
         public:
-            DataModelField(nlohmann::json& _data): data(_data) {
+            explicit DataModelField(nlohmann::json& _data): data(_data) {
                 // get the parameters to assure they exist
                 this->name();
                 this->type();
@@ -28,11 +28,11 @@ namespace siphon {
 
     class DataModel {
         public:
-            DataModel(nlohmann::json&);
+            explicit DataModel(nlohmann::json&);
             DataStructure dataStructure();
-            std::vector<DataModelField> fields();
+            std::vector<DataModelField>* fields();
         private:
-            std::vector<DataModelField> _fields;
+            std::vector<DataModelField>* _fields;
             DataStructure _data_structure;
     };
 }

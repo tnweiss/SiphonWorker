@@ -15,61 +15,59 @@
 namespace siphon {
     /////////////////////////////// Helper Functions ///////////////////////////////
     template <typename T>
-    void validate_type(nlohmann::json, std::string);
+    void validate_type(const nlohmann::json&, const std::string&);
 
     template <typename T>
-    void validate_type(nlohmann::json&, std::string, std::string);
+    void validate_type(const nlohmann::json&, const std::string&, const std::string&);
 
-    template <typename T>
-    void validate_exists(nlohmann::json, std::string);
+    void validate_exists(const nlohmann::json&, const std::string&);
 
-    template <typename T>
-    nlohmann::json* validate_exists(nlohmann::json&, std::string, std::string);
+    const nlohmann::json* validate_exists(const nlohmann::json&, const std::string&, const std::string&);
 
     /////////////////////////////// Parameter Parsing ///////////////////////////////
 
     template <typename T>
-    T parameterParse(nlohmann::json&, std::string);
+    T parameterParse(const nlohmann::json&, const std::string&);
 
     template <typename T>
-    T parameterParse(nlohmann::json&, std::string, T);
+    T parameterParse(const nlohmann::json&, const std::string&, const T&);
 
     template <typename T>
-    T parameterParseEnum(nlohmann::json&, std::string);
+    T parameterParseEnum(const nlohmann::json&, const std::string&);
 
     template <typename T>
-    T parameterParseEnum(nlohmann::json&, std::string, T);
+    T parameterParseEnum(const nlohmann::json&, const std::string&, const T&);
 
     template <typename T>
-    std::vector<T>* parameterParseArray(nlohmann::json&, std::string);
+    std::unique_ptr<std::vector<T>> parameterParseArray(const nlohmann::json&, const std::string&);
 
     template <typename T>
-    std::vector<T>* parameterParseArray(nlohmann::json&, std::string, std::vector<T>);
+    std::unique_ptr<std::vector<T>> parameterParseArray(const nlohmann::json&, const std::string&,
+                                                        std::vector<T>&);
 
     /////////////////////////////// Parameter Parse Short Long ///////////////////////////////
 
     template <typename T>
-    T parameterParseSL(nlohmann::json&, std::string, std::string);
+    T parameterParseSL(const nlohmann::json&, const std::string&, const std::string&);
 
     template <typename T>
-    T parameterParseSL(nlohmann::json&, std::string, std::string, T);
+    T parameterParseSL(const nlohmann::json&, const std::string&, const std::string&, const T&);
 
     template <typename T>
-    T parameterParseSLEnum(nlohmann::json&, std::string, std::string);
+    T parameterParseSLEnum(const nlohmann::json&, const std::string&, const std::string&);
 
     template <typename T>
-    T parameterParseSLEnum(nlohmann::json&, std::string, std::string, T);
+    T parameterParseSLEnum(const nlohmann::json&, const std::string&, const std::string&, const T&);
 
     template <typename T>
-    std::vector<T>* parameterParseSLArray(nlohmann::json&, std::string, std::string);
+    std::vector<T>* parameterParseSLArray(const nlohmann::json&, const std::string&, const std::string&);
 
     template <typename T>
-    std::vector<T>* parameterParseSLArray(nlohmann::json&, std::string, std::string, std::vector<T>);
+    std::vector<T>* parameterParseSLArray(const nlohmann::json&, const std::string&, const std::string&,
+                                          const std::vector<T>&);
 
-
-
-    bool isVariable(std::string &data);
-    int variableIndex(std::string &data);
+    bool isVariable(const std::string& data);
+    int variableIndex(const std::string& data);
 }
 #include "parameter_parse.tpp"
 #endif
