@@ -14,3 +14,8 @@ add_executable(commonTest
         common/models_tests.cpp
     )
 target_link_libraries(commonTest PRIVATE siphon_common ${PYTHON_LIBRARIES})
+
+add_executable(jsonTest
+        common/main.cpp
+        common/jsonTest.cpp
+    )

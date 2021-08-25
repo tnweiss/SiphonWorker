@@ -27,6 +27,9 @@ namespace siphon {
             KeyNotFoundParseException(std::string key) {
                 this->msg = (boost::format("Unable to find required parameter '%1%'") % key).str();
             }
+            KeyNotFoundParseException(std::string shortKey, std::string longKey) {
+                this->msg = (boost::format("Unable to find required parameter S:'%1%' L:'%2%'") % shortKey % longKey).str();
+            }
             virtual const char* what() const throw()
             {
                 return msg.c_str();
