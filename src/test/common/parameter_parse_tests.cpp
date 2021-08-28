@@ -1,7 +1,5 @@
 #include <string>
 #include <vector>
-#include "nlohmann/json.hpp"
-#include "boost/any.hpp"
 #include "catch2.hpp"
 
 #include "../data.hpp"
@@ -93,23 +91,57 @@ TEST_CASE( "TestParameterParseArrayDefault", "[common][parameterParse]" ) {
     REQUIRE(d->at(0) == "1");
 }
 
-//
-//TEST_CASE( "TestParameterParseRequiredException", "[parameterParse]" ) {
-//    nlohmann::json data = getGenericData1();
-//
-//    REQUIRE_THROWS(siphon::parameterParse<std::string>(data, "doesNotExist"));
-//}
-//
-//
-//TEST_CASE( "TestParameterParseWrongTypeException", "[parameterParse]" ) {
-//    nlohmann::json data = getGenericData1();
-//
-//    REQUIRE_THROWS_AS(siphon::parameterParse<int>(data, "hello"), siphon::InvalidTypeParseException);
-//}
-//
-//TEST_CASE( "TestParameterParseNotRequiredNotExists", "[parameterParse]" ) {
-//    nlohmann::json data = getGenericData1();
-//
-//    std::string doesNotExistValue = siphon::parameterParse<std::string>(data, "doesNotExist", "nowItDoes");
-//    REQUIRE(doesNotExistValue.compare("nowItDoes") == 0);
-//}
+
+TEST_CASE( "TestParameterParseSL", "[common][parameterParse]" ) {
+    REQUIRE(siphon::parameterParseSL<int>(genericData1, "intField", "notThere") == 3);
+    REQUIRE(siphon::parameterParseSL<std::string>(genericData1, "notThere", "stringField") == "Hello World");
+    REQUIRE(siphon::parameterParseSL<float>(genericData1, "floatField", "notThere") == 3.101f);
+    REQUIRE(siphon::parameterParseSL<unsigned int>(genericData1, "notThere", "unsignedIntField") == 100u);
+    REQUIRE(siphon::parameterParseSL<bool>(genericData1, "boolField", "notThere") == true);
+}
+
+TEST_CASE( "TestParameterParseSLDefault", "[common][parameterParse]" ) {
+    REQUIRE(siphon::parameterParseSL<int>(genericData1, "intFieldN", "notThere", 5) == 5);
+    REQUIRE(siphon::parameterParseSL<std::string>(genericData1, "notThere", "stringFieldN", "Hi") == "Hi");
+    REQUIRE(siphon::parameterParseSL<float>(genericData1, "floatFieldN", "notThere", 5.12f) == 5.12f);
+    REQUIRE(siphon::parameterParseSL<unsigned int>(genericData1, "notThere", "unsignedIntFieldN", 2) == 2u);
+    REQUIRE(siphon::parameterParseSL<bool>(genericData1, "boolFieldN", "notThere", false) == false);
+}
+
+TEST_CASE( "TestParameterParseSLEnum", "[common][parameterParse]" ) {
+  REQUIRE(siphon::parameterParseSLEnum<TEST_ENUM>(genericData1, "enumField", "notThere") == TEST_ENUM::TEST_PASS);
+}
+
+TEST_CASE( "TestParameterParseSLEnumDefault", "[common][parameterParse]" ) {
+  REQUIRE(siphon::parameterParseSLEnum<TEST_ENUM>(genericData1, "notThere", "enumFieldN", TEST_ENUM::TEST_FAIL) ==
+      TEST_ENUM::TEST_FAIL);
+}
+
+TEST_CASE( "TestParameterParseSLArray", "[common][parameterParse]" ) {
+  std::unique_ptr<std::vector<std::string>> d = siphon::parameterParseSLArray<std::string>(genericData1,
+                                                                                           "arrayField",
+                                                                                           "notThere");
+
+  REQUIRE(d->size() == 2);
+  REQUIRE(d->at(0) == "hello");
+  REQUIRE(d->at(1) == "world");
+}
+
+TEST_CASE( "TestParameterParseArraySLDefault", "[common][parameterParse]" ) {
+  auto* defaultData = new std::vector<std::string>({"1"});
+  std::unique_ptr<std::vector<std::string>> d = siphon::parameterParseSLArray<std::string>(genericData1,
+                                                                                           "arrayFieldN",
+                                                                                           "notThere",
+                                                                                           *defaultData);
+
+  REQUIRE(d->size() == 1);
+  REQUIRE(d->at(0) == "1");
+}
+
+TEST_CASE( "TestIsVariable", "[common][parameterParse]" ) {
+  REQUIRE(1 == 2);
+}
+
+TEST_CASE( "TestVariableIndex", "[common][parameterParse]" ) {
+  REQUIRE(1 == 2);
+}

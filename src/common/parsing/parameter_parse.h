@@ -60,11 +60,12 @@ namespace siphon {
     T parameterParseSLEnum(const nlohmann::json&, const std::string&, const std::string&, const T&);
 
     template <typename T>
-    std::vector<T>* parameterParseSLArray(const nlohmann::json&, const std::string&, const std::string&);
+    std::unique_ptr<std::vector<T>> parameterParseSLArray(const nlohmann::json&, const std::string&,
+                                                          const std::string&);
 
     template <typename T>
-    std::vector<T>* parameterParseSLArray(const nlohmann::json&, const std::string&, const std::string&,
-                                          const std::vector<T>&);
+    std::unique_ptr<std::vector<T>> parameterParseSLArray(const nlohmann::json&, const std::string&, const std::string&,
+                                                          std::vector<T>&);
 
     bool isVariable(const std::string& data);
     int variableIndex(const std::string& data);

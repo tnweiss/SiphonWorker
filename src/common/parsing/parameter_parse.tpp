@@ -114,14 +114,14 @@ namespace siphon {
     template <typename T>
     T parameterParseSL(const nlohmann::json& data, const std::string& shortKey, const std::string& longKey) {
         const nlohmann::json *o = validate_exists(data, shortKey, longKey);
-        validate_type<T>(data, shortKey, longKey);
+        validate_type<T>(*o, shortKey, longKey);
 
         return o->get<T>();
     }
 
     template <typename T>
     T parameterParseSL(const nlohmann::json& data, const std::string& shortKey, const std::string& longKey,
-                       T& defaultVal) {
+                       const T& defaultVal) {
         try {
             return parameterParseSL<T>(data, shortKey, longKey);
         } catch (siphon::KeyNotFoundParseException& e) {
@@ -130,7 +130,7 @@ namespace siphon {
     }
 
     template <typename T>
-    T parameterParseEnumSL(const nlohmann::json& data, const std::string& shortKey, const std::string& longKey) {
+    T parameterParseSLEnum(const nlohmann::json& data, const std::string& shortKey, const std::string& longKey) {
         // get the string representation of the type
         auto _type = parameterParseSL<std::string>(data, shortKey, longKey);
         auto cast_val = magic_enum::enum_cast<T>(_type);
@@ -144,18 +144,18 @@ namespace siphon {
     }
 
     template <typename T>
-    T parameterParseEnumSL(const nlohmann::json& data, const std::string& shortKey, const std::string& longKey,
+    T parameterParseSLEnum(const nlohmann::json& data, const std::string& shortKey, const std::string& longKey,
                            const T& defaultVal) {
         try {
-            return parameterParseEnumSL<T>(data, shortKey, longKey);
+            return parameterParseSLEnum<T>(data, shortKey, longKey);
         } catch (siphon::KeyNotFoundParseException& e) {
             return defaultVal;
         }
     }
 
     template <typename T>
-    std::vector<T> parameterParseArraySL(const nlohmann::json& data, const std::string& shortKey,
-                                         const std::string& longKey) {
+    std::unique_ptr<std::vector<T>> parameterParseSLArray(const nlohmann::json& data, const std::string& shortKey,
+                                                          const std::string& longKey) {
         const nlohmann::json *o = validate_exists(data, shortKey, longKey);
 
         if (!o->is_array()) {
@@ -166,21 +166,22 @@ namespace siphon {
 
         std::vector<nlohmann::json> v = o->get<std::vector<nlohmann::json>>();
 
-        std::vector<T> output{};
+        std::unique_ptr<std::vector<T>> output(new std::vector<T>());
         for(nlohmann::json d:  v) {
-            output.push_back(T(d));
+            output->push_back(T(d));
         }
 
         return output;
     }
 
     template <typename T>
-    std::vector<T> parameterParseArraySL(const nlohmann::json& data, const std::string& shortKey,
-                                         const std::string& longKey, const std::vector<T>& defaultVal) {
+    std::unique_ptr<std::vector<T>> parameterParseSLArray(const nlohmann::json& data, const std::string& shortKey,
+                                                          const std::string& longKey,
+                                                          std::vector<T>& defaultVal) {
         try {
-            return parameterParseArray<T>(data, shortKey, longKey);
+            return parameterParseSLArray<T>(data, shortKey, longKey);
         } catch (siphon::KeyNotFoundParseException& e) {
-            return defaultVal;
+            return std::unique_ptr<std::vector<T>>(&defaultVal);
         }
     }
 }
