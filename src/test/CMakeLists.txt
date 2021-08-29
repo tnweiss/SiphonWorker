@@ -11,6 +11,8 @@
 add_executable(commonTest
         common/main.cpp
         data.hpp
+
         common/parameter_parse_tests.cpp
+        common/models_tests.cpp
     )
 target_link_libraries(commonTest PRIVATE siphon_common ${PYTHON_LIBRARIES})

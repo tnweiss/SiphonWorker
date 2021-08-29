@@ -4,18 +4,20 @@
 #ifndef SIPHON_TEST_DATA_H
 #define SIPHON_TEST_DATA_H
 
-const nlohmann::json genericData1 =
-R"(
-{
-    "stringField": "Hello World",
-    "intField": 3,
-    "floatField": 3.101,
-    "boolField": true,
-    "unsignedIntField": 100,
-    "enumField": "TEST_PASS",
-    "arrayField": ["hello", "world"]
+static nlohmann::json genericData1() {
+  return R"(
+    {
+        "stringField": "Hello World",
+        "intField": 3,
+        "floatField": 3.101,
+        "boolField": true,
+        "unsignedIntField": 100,
+        "enumField": "TEST_PASS",
+        "arrayField": ["hello", "world"],
+        "varField": "$.6"
+    }
+    )"_json;
 }
-)"_json;
 
 
 enum TEST_ENUM {
@@ -24,28 +26,31 @@ enum TEST_ENUM {
 };
 
 
-const nlohmann::json dataModelData =
-        R"(
-{
-    "data_structure": "array",
-    "fields": [
-        {
-            "field_name": "test",
-            "field_type": "INTEGER",
-            "description": "This is a general description"
-        }
-    ]
+static nlohmann::json dataModelData() {
+  return R"(
+    {
+        "data_structure": "array",
+        "fields": [
+            {
+                "field_name": "test",
+                "field_type": "INTEGER",
+                "description": "This is a general description"
+            }
+        ]
+    }
+  )"_json;
 }
-        )"_json;
 
 
-nlohmann::json dataModelFieldData =
-        R"(
-{
-    "field_name": "test",
-    "field_type": "STRING",
-    "description": "This is a general description"
+static nlohmann::json dataModelFieldData() {
+  return R"(
+    {
+        "field_name": "test",
+        "field_type": "STRING",
+        "description": "This is a general description"
+    }
+  )"_json;
 }
-        )"_json;
+
 
 #endif

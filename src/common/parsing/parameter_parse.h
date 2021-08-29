@@ -1,4 +1,5 @@
 #include <map>
+#include <string>
 #include <tuple>
 #include <memory>
 #include "magic_enum.hpp"
@@ -67,8 +68,8 @@ namespace siphon {
     std::unique_ptr<std::vector<T>> parameterParseSLArray(const nlohmann::json&, const std::string&, const std::string&,
                                                           std::vector<T>&);
 
-    bool isVariable(const std::string& data);
-    int variableIndex(const std::string& data);
+    bool isVariable(const nlohmann::json& data);
+    int variableIndex(const nlohmann::json& data);
 }
 #include "parameter_parse.tpp"
 #endif
