@@ -26,7 +26,6 @@ namespace siphon {
 
     void validate_exists(const nlohmann::json& data, const std::string& key) {
         if (!data.contains(key)) {
-          std::cout << data.dump() << std::endl;
             throw siphon::KeyNotFoundParseException(key);
         }
     }
