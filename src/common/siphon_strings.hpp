@@ -5,7 +5,9 @@
 
 namespace siphon {
     // parsing variables
-    static const char* VARIABLE_PREFIX = "$.";
+    static const char* VARIABLE_PREFIX = "$."; // pretty version used externally
+    static const char* INDEX_PREFIX = "!."; // internal usage
+    static const char* KEY_PREFIX = "?.";
 
     // data model field keys
     static const char* DATA_MODEL_FIELD_NAME = "field_name";

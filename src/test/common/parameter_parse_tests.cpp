@@ -144,8 +144,8 @@ TEST_CASE( "TestIsVariable", "[common][parameterParse]" ) {
 }
 
 TEST_CASE( "TestVariableIndex", "[common][parameterParse]" ) {
-  char* vp = new char[strlen(siphon::VARIABLE_PREFIX) + 1];
-  strcpy(vp, siphon::VARIABLE_PREFIX);
+  char* vp = new char[strlen(siphon::INDEX_PREFIX) + 1];
+  strcpy(vp, siphon::INDEX_PREFIX);
   strcat(vp, "1");
 
   REQUIRE(siphon::variableIndex(nlohmann::json(vp)) == 1);

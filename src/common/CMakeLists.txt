@@ -10,6 +10,12 @@ ADD_LIBRARY( siphon_common
         models/data_model_field.cpp
         models/data_model.h
         models/data_model.cpp
+
+        processing/parser.hpp
+        processing/processor.hpp
+
+        processing/filters/processors/gt.cpp
+        processing/filters/parsers/gt_parser.cpp
         )
 
 target_include_directories(siphon_common PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")

@@ -8,7 +8,7 @@ namespace siphon {
         // get the pointer to the value
         const std::string* sVal = data.get_ptr<const nlohmann::json::string_t*>();
         // determine if the string starts with the prefix
-        return sVal->rfind(siphon::VARIABLE_PREFIX, 0) == 0;
+        return sVal->rfind(siphon::INDEX_PREFIX, 0) == 0;
       }
       // if the data is not a string it can not be a variable
       return false;
@@ -21,7 +21,7 @@ namespace siphon {
       }
 
       const std::string* d = data.get_ptr<const nlohmann::json::string_t*>();
-      return std::stoi(d->substr(strlen(siphon::VARIABLE_PREFIX)));
+      return std::stoi(d->substr(strlen(siphon::INDEX_PREFIX)));
     }
 
     void validate_exists(const nlohmann::json& data, const std::string& key) {
