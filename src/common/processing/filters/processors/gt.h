@@ -1,6 +1,8 @@
 //
 // Created by tyler on 8/30/21.
 //
+#include "nlohmann/json.hpp"
+
 #include "processing/processor.hpp"
 
 #ifndef SIPHON_SRC_COMMON_VALUEFILTERS_GT_H_
@@ -9,8 +11,8 @@
 namespace siphon {
 class gt : Processor {
  public:
-  void process(std::vector<boost::any> &) final;
-  void process(std::map<std::string, boost::any> &) final;
+  void process(std::vector<nlohmann::json> &) final;
+  void process(nlohmann::json&) final;
 
   /**
    * trusted constructor

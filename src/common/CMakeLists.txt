@@ -10,6 +10,8 @@ ADD_LIBRARY( siphon_common
         models/data_model_field.cpp
         models/data_model.h
         models/data_model.cpp
+#        models/frame.cpp
+#        models/frame.h
 
         processing/parser.hpp
         processing/processor.hpp

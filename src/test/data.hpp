@@ -52,5 +52,14 @@ static nlohmann::json dataModelFieldData() {
   )"_json;
 }
 
+static nlohmann::json tableData() {
+  return R"(
+    [
+      ["a", "b", 1, 2],
+      ["a", "c", 3, 4]
+    ]
+  )"_json;
+}
+
 
 #endif

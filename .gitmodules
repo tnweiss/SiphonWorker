@@ -1,0 +1,3 @@
+[submodule "SiphonWorkerDependencies"]
+	path = dependencies
+	url = https://github.com/tnweiss/SiphonWorkerDependencies.git

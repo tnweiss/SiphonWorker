@@ -17,13 +17,13 @@ class Processor {
    * Determine if the provided data passes the given test (array)
    * @return
    */
-  virtual void process(std::vector<boost::any> &) = 0;
+  virtual void process(std::vector<nlohmann::json>&) = 0;
 
   /**
  * Determine if the provided data passes the given test (object)
  * @return
  */
-  virtual void process(std::map<std::string, boost::any> &) = 0;
+  virtual void process(nlohmann::json&) = 0;
 };
 
 }

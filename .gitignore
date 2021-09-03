@@ -3,3 +3,4 @@ third_party/*
 .vscode/
 .idea/
 cmake-build-debug/
+dependencies

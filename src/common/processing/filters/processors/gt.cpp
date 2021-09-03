@@ -5,11 +5,12 @@
 #include "gt.h"
 
 namespace siphon {
-void gt::process(std::vector<boost::any> &) {
+
+void gt::process(std::vector<nlohmann::json>& frame) {
 
 }
 
-void gt::process(std::map<std::string, boost::any> &) {
+void gt::process(nlohmann::json& frame) {
 
 }
 }
