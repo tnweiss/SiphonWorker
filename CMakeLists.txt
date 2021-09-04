@@ -14,5 +14,16 @@ link_directories(dependencies/lib)
 include_directories(dependencies/include ${PYTHON_INCLUDE_DIRS})
 
 
+####### Boost Libraries ##########
+set (LIBRARY_PREFIX )
+set (LIBRARY_SUFFIX )
+if (MSVC)
+    set (LIBRARY_PREFIX lib)
+    set (LIBRARY_SUFFIX -vc142-mt-x64-1_71)
+endif (MSVC)
+
+set(LIB_BOOST_SERIALIZATION ${LIBRARY_PREFIX}boost_serialization${LIBRARY_SUFFIX})
+
+
 ########## Include the src subdirectory ##########
 add_subdirectory(src)
