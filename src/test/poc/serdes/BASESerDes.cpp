@@ -2,23 +2,24 @@
 // Created by Tyler on 9/4/2021.
 //
 
-#include "BASESerdes.h"
+#include "BASESerDes.h"
 
-template<typename T>
-const char* type() {
+
+const char* BASESerDes::type() {
     return "BASE";
 }
 
-const char* serialize(const PyObject*) {
+
+std::shared_ptr<char> BASESerDes::serialize(PyObject*) {
     return nullptr;
 }
 
 
-std::shared_ptr<void> deserialize(const char*) {
-    return std::make_shared<void>(nullptr);
+std::shared_ptr<void> BASESerDes::deserialize(const char*) {
+    return nullptr;
 }
 
 
-const char* serialize(std::shared_ptr<void>) {
+std::shared_ptr<char> BASESerDes::serialize(const std::shared_ptr<void>) {
     return nullptr;
 }

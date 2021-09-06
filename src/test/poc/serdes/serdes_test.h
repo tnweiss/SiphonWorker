@@ -8,7 +8,7 @@
 #ifndef SIPHON_SERDES_TEST_H
 #define SIPHON_SERDES_TEST_H
 
-template<typename T>
+
 class SerDesTest {
 public:
     /**
@@ -16,13 +16,12 @@ public:
      * @return
      */
     virtual const char* type() = 0;
-//    virtual bool test(const std::vector<T>&) = 0;
 
     /**
      * Step 1. Python plugin -> redis
      * @return
      */
-    virtual const char* serialize(const PyObject*) = 0;
+    virtual std::shared_ptr<char> serialize(PyObject*) = 0;
 
     /**
      * Step 2. redis -> container, read data in from redis to process
@@ -34,8 +33,7 @@ public:
      * Step 3. container -> redis, send data back to redis
      * @return
      */
-    virtual const char* serialize(std::shared_ptr<void>) = 0;
-
+    virtual std::shared_ptr<char> serialize(std::shared_ptr<void>) = 0;
 
 };
 
