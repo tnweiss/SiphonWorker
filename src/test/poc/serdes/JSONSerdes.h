@@ -10,7 +10,7 @@
 #define SIPHON_JSONSERDES_H
 
 template<typename Z>
-class JSONSerdes: public SerdesTest<Z> {
+class JSONSerdes: public SerDesTest<Z> {
 public:
     const char* type() final;
     const char* serialize(const std::vector<Z>&) final;

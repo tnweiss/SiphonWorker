@@ -10,9 +10,11 @@
 #include <chrono>
 #include <ctime>
 #include "nlohmann/json.hpp"
+#include "boost/python.hpp"
 
 #include "serdes_test.h"
 #include "JSONSerdes.h"
+#include "BASESerdes.h"
 
 const static int NUM_BYTES = 1000000;
 
@@ -25,6 +27,8 @@ const static int NUM_BYTES = 1000000;
 
 template <typename T>
 std::vector<T> data(const int bytes, T d) {
+    PyObject* o = boost::python::make_tuple();
+    PyTuple_
     // calculate the vector length
     const int v_len = bytes / sizeof(T);
 
@@ -67,8 +71,9 @@ void startTest(const std::string& _type, int _size, unsigned int & currentCount,
 
 int main () {
     // add all the tests
-    std::vector<std::unique_ptr<SerdesTest<long>>> tests{};
-    tests.push_back(std::unique_ptr<SerdesTest<long>>(new JSONSerdes<long>()));
+    std::vector<std::unique_ptr<SerDesTest<long>>> tests{};
+    tests.push_back(std::unique_ptr<SerDesTest<long>>(new JSONSerdes<long>()));
+    tests.push_back(std::unique_ptr<SerDesTest<long>>(new BASESerdes<long>()));
 
     //                1Kb   50kb   100kb   500kb   1Mb      5Mb      10Mb      50Mb
     int sizeTestsB[] {1000, 50000, 100000, 500000, 1000000, 5000000, 10000000, 50000000};
@@ -77,16 +82,18 @@ int main () {
     unsigned int totalTests = (sizeof (sizeTestsB) / sizeof(int)) * tests.size();
     unsigned int currentTest = 1;
 
-    std::chrono::steady_clock::time_point start;
-    std::chrono::steady_clock::time_point end;
-    nlohmann::json testOutput;
+    // start the python interpreter, so we can create python objects in test data
+    Py_Initialize();
+
+    // used to mark the start + checkpoints of tests
+    std::chrono::steady_clock::time_point start, end;
 
     // for each data set size, run each test
     for (const int testSize: sizeTestsB) {
-        // generate the test data
-        const std::vector<long> td = data<long>(testSize, 100L);
+        // generate the test data, imitate data coming from python program
+        PyObject* td = data(testSize);
 
-        for (const std::unique_ptr<SerdesTest<long>>& t: tests) {
+        for (const std::unique_ptr<SerDesTest<long>>& t: tests) {
             // log the start
             startTest(t->type(), testSize, currentTest, totalTests);
 
