@@ -14,7 +14,7 @@ class JSONSerDes: public SerDesTest {
 public:
     JSONSerDes(): dumps(boost::python::import("json").attr("dumps")) {};
     const char* type() final;
-    std::shared_ptr<char> serialize(PyObject*) final;
+    const char* serialize(PyObject*) final;
     std::shared_ptr<void> deserialize(const char*) final;
     std::shared_ptr<char> serialize(std::shared_ptr<void>) final;
 private:
@@ -23,19 +23,22 @@ private:
 
 class JSONContainer {
 public:
-    JSONContainer(const char* json) {
-        std::string a{};
-        a.append(json);
+    explicit JSONContainer(const char* const json) {
+        std::string t(json);
 
-        this->_json = nlohmann::json::parse(a);
+        _json = new nlohmann::basic_json(json);
     }
 
-    nlohmann::json j() {
-        return this->_json;
+    ~JSONContainer() {
+        delete _json;
+    }
+
+    nlohmann::json *j() {
+        return _json;
     }
 
 private:
-    nlohmann::json _json;
+    nlohmann::json* _json;
 };
 
 #endif //SIPHON_JSONSERDES_H

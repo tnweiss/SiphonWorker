@@ -4,24 +4,28 @@
 
 #include "boost/python.hpp"
 #include "JSONSerDes.h"
-
+#include <iostream>
 
 const char *JSONSerDes::type() {
     return "JSON";
 }
 
-std::shared_ptr<char> JSONSerDes::serialize(PyObject * pyJson) {
+const char* JSONSerDes::serialize(PyObject * pyJson) {
     // convert pyobject to boost python object
     boost::python::object d = boost::python::extract<boost::python::object>(pyJson);
 
+    // capture the return value of the return value
+    boost::python::object rv = dumps(d);
+    const char* prv = boost::python::extract<const char*>(rv);
+    size_t prvLen = strlen(prv);
+
+    // copy and return
+    char* rvBuffer = new char[prvLen + 1];
+    rvBuffer[prvLen] = '\0';
+    strncpy(rvBuffer, prv, strlen(prv));
+
     // call the dumps function and capture the return value
-    boost::python::str r = boost::python::extract<boost::python::str>(dumps(d));
-
-    // extract the byte string out of the return value
-    char* rs = boost::python::extract<char*>(r);
-
-    // return the shared pointer
-    return std::shared_ptr<char>(rs);
+    return rvBuffer;
 }
 
 std::shared_ptr<void> JSONSerDes::deserialize(const char *serializedData) {
@@ -31,7 +35,7 @@ std::shared_ptr<void> JSONSerDes::deserialize(const char *serializedData) {
 
 std::shared_ptr<char> JSONSerDes::serialize(std::shared_ptr<void> json) {
     // get the string representation
-    std::string s = ((JSONContainer*)json.get())->j().dump();
+    std::string s = ((JSONContainer*)json.get())->j()->dump();
 
     // copy the data into a string buffer
     std::shared_ptr<char> rv(new char[s.length() + 1]);

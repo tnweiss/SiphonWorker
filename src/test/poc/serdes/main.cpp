@@ -20,10 +20,24 @@
 const static int NUM_BYTES = 1000000;
 
 
-//nlohmann::json deserializeJson(char* d) {
-//    std::string a(d);
-//    return nlohmann::json::parse(a);
-//}
+// pulled from https://gist.github.com/dgoguerra/7194777
+static const char *humanSize(uint64_t bytes)
+{
+    char *suffix[] = {"B", "KB", "MB", "GB", "TB"};
+    char length = sizeof(suffix) / sizeof(suffix[0]);
+
+    int i = 0;
+    double dblBytes = bytes;
+
+    if (bytes > 1024) {
+        for (i = 0; (bytes / 1024) > 0 && i<length-1; i++, bytes /= 1024)
+            dblBytes = bytes / 1024.0;
+    }
+
+    static char output[200];
+    sprintf(output, "%.02lf %s", dblBytes, suffix[i]);
+    return output;
+}
 
 
 PyObject* data(const unsigned int bytes) {
@@ -67,7 +81,8 @@ void endTest(const std::string& _type, int _size, unsigned long _durationUs, boo
 void startTest(const std::string& _type, int _size, unsigned int & currentCount, unsigned int total) {
     std::cout << std::setw(3) << std::right << currentCount << "/";
     std::cout << std::setw(3) << std::left << total;
-    std::cout << " Running: " << std::setw(10) << std::left << _type << " with size " << std::setw(10) << _size;
+    std::cout << " Running: " << std::setw(10) << std::left << _type << " with size " << std::setw(12) <<
+        humanSize(_size);
     currentCount ++;
 }
 
@@ -119,10 +134,11 @@ int main () {
     tests.push_back(std::unique_ptr<SerDesTest>(new BASESerDes())); // used as a baseline to ensure measurements are not effected by copying resources
 
     //                1Kb   50kb   100kb   500kb   1Mb      5Mb      10Mb      50Mb
-    int sizeTestsB[] {1000, 50000, 100000, 500000, 1000000, 5000000, 10000000, 50000000};
+    int sizeTestsB[] {1024, 51200, 102400, 512000, 1048576, 5242880, 10485760, 52428800};
 
     // for logging
     unsigned int totalTests = (sizeof (sizeTestsB) / sizeof(int)) * tests.size();
+
     unsigned int currentTest = 1;
 
     // used to mark the start + checkpoints of tests
@@ -133,7 +149,7 @@ int main () {
     std::vector<nlohmann::json> checkpoints{};
 
     // declare intermediate data
-    std::shared_ptr<char> serializedData;
+    const char* serializedData;
     std::shared_ptr<void> deserializedData;
 
     // for each data set size, run each test
@@ -151,7 +167,7 @@ int main () {
             serializedData = t->serialize(td);                                      // Python -> Redis
             checkpoints.push_back(checkpoint(t->type(), testSize,  "PythonToRedis", start));
 
-            deserializedData = t->deserialize(serializedData.get());            // Redis -> Container
+            deserializedData = t->deserialize(serializedData);            // Redis -> Container
             checkpoints.push_back(checkpoint(t->type(), testSize,  "RedisToContainer", start));
 
             t->serialize(deserializedData);                                                     // Container -> Redis
@@ -165,13 +181,10 @@ int main () {
             duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
             endTest(t->type(), testSize, duration,true);
 
-            // destroy the intermediate objects
-            if (serializedData != nullptr) {
-                serializedData.reset();
-            }
             if (deserializedData != nullptr) {
                 deserializedData.reset();
             }
+            delete serializedData;
         }
 
         // write the checkpoints

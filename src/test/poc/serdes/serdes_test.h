@@ -21,7 +21,7 @@ public:
      * Step 1. Python plugin -> redis
      * @return
      */
-    virtual std::shared_ptr<char> serialize(PyObject*) = 0;
+    virtual const char* serialize(PyObject*) = 0;
 
     /**
      * Step 2. redis -> container, read data in from redis to process

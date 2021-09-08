@@ -11,7 +11,7 @@
 class BASESerDes: public SerDesTest {
 public:
     const char* type() final;
-    std::shared_ptr<char> serialize(PyObject*) final;
+    const char* serialize(PyObject*) final;
     std::shared_ptr<void> deserialize(const char*) final;
     std::shared_ptr<char> serialize(std::shared_ptr<void>) final;
 };

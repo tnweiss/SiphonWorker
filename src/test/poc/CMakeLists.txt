@@ -5,6 +5,7 @@ add_executable(serdesPOC
         serdes/BASESerDes.cpp
         )
 target_link_libraries( serdesPOC PUBLIC ${PYTHON_LIBRARIES} ${LIB_BOOST_PYTHON})
+target_precompile_headers(serdesPOC PUBLIC ../../../dependencies/include/nlohmann/json.hpp)
 
 #ADD_LIBRARY( t SHARED t.cpp)
 #target_link_libraries( t PRIVATE ${PYTHON_LIBRARIES} ${LIB_BOOST_PYTHON})

@@ -17,7 +17,6 @@ set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR} )
 #    add_definitions( -DBOOST_ALL_DYN_LINK )
 #endif()
 
-
 ####### Python 3.8 headers ##########
 find_package(PythonLibs 3.8 REQUIRED)
 

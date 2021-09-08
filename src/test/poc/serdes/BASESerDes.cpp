@@ -10,16 +10,16 @@ const char* BASESerDes::type() {
 }
 
 
-std::shared_ptr<char> BASESerDes::serialize(PyObject*) {
+const char* BASESerDes::serialize(PyObject*) {
     return nullptr;
 }
 
 
 std::shared_ptr<void> BASESerDes::deserialize(const char*) {
-    return nullptr;
+    return {nullptr};
 }
 
 
 std::shared_ptr<char> BASESerDes::serialize(const std::shared_ptr<void>) {
-    return nullptr;
+    return {nullptr};
 }
