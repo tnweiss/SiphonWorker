@@ -1,11 +1,13 @@
 add_executable(serdesPOC
         serdes/main.cpp
+        serdes/serdes_test.h
 
         serdes/JSONSerDes.cpp
         serdes/BASESerDes.cpp
-        )
+        serdes/FrameSerDes.cpp
+        serdes/FrameSerDes.h)
 target_link_libraries( serdesPOC PUBLIC ${PYTHON_LIBRARIES} ${LIB_BOOST_PYTHON})
-target_precompile_headers(serdesPOC PUBLIC ../../../dependencies/include/nlohmann/json.hpp)
+#target_precompile_headers(serdesPOC PUBLIC ../../../dependencies/include/nlohmann/json.hpp)
 
 #ADD_LIBRARY( t SHARED t.cpp)
 #target_link_libraries( t PRIVATE ${PYTHON_LIBRARIES} ${LIB_BOOST_PYTHON})

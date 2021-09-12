@@ -1,19 +1,19 @@
 //
 // Created by Tyler on 9/4/2021.
 //
-#include <vector>
-#include <iostream>
-#include "serdes_test.h"
 
 #ifndef SIPHON_BASESERDES_H
 #define SIPHON_BASESERDES_H
 
+#include "serdes_test.h"
+
 class BASESerDes: public SerDesTest {
 public:
     const char* type() final;
-    const char* serialize(PyObject*) final;
-    std::shared_ptr<void> deserialize(const char*) final;
-    std::shared_ptr<char> serialize(std::shared_ptr<void>) final;
+    DataContainer serialize(PyObject*) final;
+    void* deserialize(DataContainer&) final;
+    DataContainer serialize(void*) final;
+    void delete_deserialized_data(void*) final;
 };
 
 

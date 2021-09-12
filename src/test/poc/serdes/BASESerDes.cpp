@@ -1,25 +1,27 @@
 //
 // Created by Tyler on 9/4/2021.
 //
-
+#define BOOST_PYTHON_STATIC_LIB
 #include "BASESerDes.h"
 
 
 const char* BASESerDes::type() {
-    return "BASE";
+    return "Base";
 }
 
 
-const char* BASESerDes::serialize(PyObject*) {
+DataContainer BASESerDes::serialize(PyObject*) {
+    return DataContainer();
+}
+
+
+void* BASESerDes::deserialize(DataContainer&) {
     return nullptr;
 }
 
 
-std::shared_ptr<void> BASESerDes::deserialize(const char*) {
-    return {nullptr};
+DataContainer BASESerDes::serialize(void*) {
+    return DataContainer();
 }
 
-
-std::shared_ptr<char> BASESerDes::serialize(const std::shared_ptr<void>) {
-    return {nullptr};
-}
+void BASESerDes::delete_deserialized_data(void*) {}

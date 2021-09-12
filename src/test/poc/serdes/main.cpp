@@ -2,6 +2,7 @@
 // Created by Tyler on 9/3/2021.
 //
 #define BOOST_PYTHON_STATIC_LIB
+#define HAVE_SNPRINTF
 #include <string>
 #include <iomanip>
 #include <memory>
@@ -10,12 +11,14 @@
 #include <fstream>
 #include <chrono>
 #include <ctime>
-#include "nlohmann/json.hpp"
 #include "boost/python.hpp"
+
+#include "nlohmann/json.hpp"
 
 #include "serdes_test.h"
 #include "JSONSerDes.h"
 #include "BASESerDes.h"
+#include "FrameSerDes.h"
 
 const static int NUM_BYTES = 1000000;
 
@@ -132,6 +135,7 @@ int main () {
     std::vector<std::unique_ptr<SerDesTest>> tests{};
     tests.push_back(std::unique_ptr<SerDesTest>(new JSONSerDes())); // using nlohmann/json to serialize / deserialize to json
     tests.push_back(std::unique_ptr<SerDesTest>(new BASESerDes())); // used as a baseline to ensure measurements are not effected by copying resources
+    tests.push_back(std::unique_ptr<SerDesTest>(new FrameSerDes())); // used as a baseline to ensure measurements are not effected by copying resources
 
     //                1Kb   50kb   100kb   500kb   1Mb      5Mb      10Mb      50Mb
     int sizeTestsB[] {1024, 51200, 102400, 512000, 1048576, 5242880, 10485760, 52428800};
@@ -149,8 +153,8 @@ int main () {
     std::vector<nlohmann::json> checkpoints{};
 
     // declare intermediate data
-    const char* serializedData;
-    std::shared_ptr<void> deserializedData;
+    DataContainer serializedData;
+    void* deserializedData;
 
     // for each data set size, run each test
     for (const int testSize: sizeTestsB) {
@@ -181,10 +185,9 @@ int main () {
             duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
             endTest(t->type(), testSize, duration,true);
 
-            if (deserializedData != nullptr) {
-                deserializedData.reset();
-            }
-            delete serializedData;
+            // cleanup
+            t->delete_deserialized_data(deserializedData);
+            serializedData.clear();
         }
 
         // write the checkpoints
