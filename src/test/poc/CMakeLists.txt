@@ -5,7 +5,7 @@ add_executable(serdesPOC
         serdes/JSONSerDes.cpp
         serdes/BASESerDes.cpp
         serdes/FrameSerDes.cpp
-        serdes/FrameSerDes.h)
+        serdes/FrameSerDes.h serdes/util.cpp serdes/util.h serdes/PyJSON.cpp serdes/PyJSON.h)
 target_link_libraries( serdesPOC PUBLIC ${PYTHON_LIBRARIES} ${LIB_BOOST_PYTHON})
 #target_precompile_headers(serdesPOC PUBLIC ../../../dependencies/include/nlohmann/json.hpp)
 
