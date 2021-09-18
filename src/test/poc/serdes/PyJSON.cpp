@@ -46,3 +46,27 @@ void PyJSON::delete_deserialized_data(void* po) {
 
     delete o;
 }
+
+bool PyJSON::test(void* actual, PyObject* expected) {
+    auto* o = ((boost::python::object*)actual)->ptr();
+
+    // get the list len + data size to calculate the size of the buffer
+    size_t expectedLen = PyList_Size(expected);
+    size_t actualLen = PyList_Size(o);
+
+    if (expectedLen != actualLen) {
+        return false;
+    }
+
+    long long e;
+    long long a;
+    for (int i=0; i<expectedLen; i++) {
+        e = PyLong_AsLong(PyList_GetItem(expected, i));
+        a = PyLong_AsLong(PyList_GetItem(o, i));
+
+        if (e != a) {
+            return false;
+        }
+    }
+    return true;
+}

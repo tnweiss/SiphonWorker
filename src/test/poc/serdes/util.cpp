@@ -106,13 +106,14 @@ void startTest(const std::string& _type, int _size, unsigned int & currentCount,
  * @param _start
  */
 nlohmann::json checkpoint(const std::string& _type, unsigned int _size, const char* _checkpoint,
-                          std::chrono::steady_clock::time_point& _start) {
+                          std::chrono::steady_clock::time_point& _last_checkpoint) {
     // use dots to track progress
 //    std::cout << ".";
 
     // calculate the duration since the start
     auto end = std::chrono::steady_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - _start).count();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - _last_checkpoint).count();
+    _last_checkpoint = end;
 
     // output ndjson
     nlohmann::json testOutput{};

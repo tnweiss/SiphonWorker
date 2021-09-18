@@ -25,3 +25,8 @@ DataContainer BASESerDes::serialize(void*) {
 }
 
 void BASESerDes::delete_deserialized_data(void*) {}
+
+
+bool BASESerDes::test(void*, PyObject*) {
+    return true;
+}

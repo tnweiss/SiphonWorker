@@ -45,3 +45,26 @@ DataContainer JSONSerDes::serialize(void* json) {
 void JSONSerDes::delete_deserialized_data(void* json) {
     delete (nlohmann::json*)json;
 }
+
+bool JSONSerDes::test(void* actual, PyObject* expected) {
+    auto* json = (nlohmann::json*)actual;
+
+    // get the list len + data size to calculate the size of the buffer
+    size_t pyListLen = PyList_Size(expected);
+
+    if (json->size() != pyListLen) {
+        return false;
+    }
+
+    long long e;
+    long long * a;
+    for (int i=0; i<pyListLen; i++) {
+        e = PyLong_AsLongLong(PyList_GetItem(expected, i));
+        a = json->at(i).get<long long*>();
+
+        if (e != *a) {
+            return false;
+        }
+    }
+    return true;
+}

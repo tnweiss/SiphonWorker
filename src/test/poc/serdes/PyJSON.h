@@ -16,6 +16,7 @@ public:
     void* deserialize(DataContainer&) final;
     DataContainer serialize(void*) final;
     void delete_deserialized_data(void*) final;
+    bool test(void*, PyObject*) final;
 private:
     const boost::python::object dumps;
     const boost::python::object loads;

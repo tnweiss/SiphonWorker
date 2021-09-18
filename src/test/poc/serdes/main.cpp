@@ -33,7 +33,8 @@ int main () {
     tests.push_back(std::unique_ptr<SerDesTest>(new PyJSON())); // used as a baseline to ensure measurements are not effected by copying resources
 
     //                1Kb   50kb   100kb   500kb   1Mb      5Mb      10Mb      50Mb
-    int sizeTestsB[] {1024, 51200, 102400, 512000, 1048576, 5242880, 10485760, 52428800};
+    //int sizeTestsB[] {1024, 51200, 102400, 512000, 1048576, 5242880, 10485760, 52428800};
+    int sizeTestsB[] {1024, 51200, 102400, 512000, 1048576, 5242880};
 
     // for logging
     unsigned int totalTests = (sizeof (sizeTestsB) / sizeof(int)) * tests.size();
@@ -41,15 +42,16 @@ int main () {
     unsigned int currentTest = 1;
 
     // used to mark the start + checkpoints of tests
-    std::chrono::steady_clock::time_point start, end;
+    std::chrono::steady_clock::time_point start, end, last_checkpoint;
     unsigned long duration;
 
     // output the checkpoints at the end of the test
     std::vector<nlohmann::json> checkpoints{};
 
     // declare intermediate data
-    DataContainer serializedData;
+    DataContainer serializedData, serializedData2;
     void* deserializedData;
+    void* output;
 
     // for each data set size, run each test
     for (const int testSize: sizeTestsB) {
@@ -61,19 +63,27 @@ int main () {
             startTest(t->type(), testSize, currentTest, totalTests);
 
             // mark start, ser/des mark end
+            last_checkpoint = std::chrono::steady_clock::now();
             start = std::chrono::steady_clock::now();
 
             serializedData = t->serialize(td);                                      // Python -> Redis
-            checkpoints.push_back(checkpoint(t->type(), testSize,  "PythonToRedis", start));
+            checkpoints.push_back(checkpoint(t->type(), testSize,  "PythonToRedis", last_checkpoint));
 
             deserializedData = t->deserialize(serializedData);            // Redis -> Container
-            checkpoints.push_back(checkpoint(t->type(), testSize,  "RedisToContainer", start));
+            checkpoints.push_back(checkpoint(t->type(), testSize,  "RedisToContainer", last_checkpoint));
 
-            t->serialize(deserializedData);                                                     // Container -> Redis
-            checkpoints.push_back(checkpoint(t->type(), testSize,  "ContainerToRedis", start));
+            serializedData2 = t->serialize(deserializedData);                                                     // Container -> Redis
+            checkpoints.push_back(checkpoint(t->type(), testSize,  "ContainerToRedis", last_checkpoint));
 
             // mark the end of the test
             end = std::chrono::steady_clock::now();
+
+            // make sure there was no loss of data
+            output = t->deserialize(serializedData2);
+            if (!t->test(output, td)) {
+                std::cout << "Faulty Test (" << t->type() << ") did not pass test" << std::endl;
+                exit(1);
+            }
 
             // log the end
             // TODO add test to ensure proper serialization
@@ -82,7 +92,9 @@ int main () {
 
             // cleanup
             t->delete_deserialized_data(deserializedData);
+            t->delete_deserialized_data(output);
             serializedData.clear();
+            serializedData2.clear();
         }
 
         // write the checkpoints

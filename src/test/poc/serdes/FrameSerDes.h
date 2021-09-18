@@ -15,11 +15,37 @@ public:
     void* deserialize(DataContainer&) final;
     DataContainer serialize(void*) final;
     void delete_deserialized_data(void*) final;
-
+    bool test(void*, PyObject*) final;
 };
 
 class Frame {
 public:
+    // copy constructor
+    Frame(const Frame& other): _typeSize(sizeof(long)), _size(other._size)
+    {
+        std::cout << "\n\n\nNO COPYING FRAME\n\n\n" << std::endl;
+        _data = other._data;
+    }
+
+    // move constructor
+    Frame(Frame&& other) noexcept : _typeSize(sizeof(long)), _size(other._size), _data(std::exchange(other._data, nullptr))
+    {}
+
+    // copy assignment
+    Frame& operator=(const Frame& other)
+    {
+        std::cout << "\n\n\nNO COPYING FRAME\n\n\n" << std::endl;
+        return *this = Frame(other);
+    }
+
+    // move assignment
+    Frame& operator=(Frame&& other) noexcept
+    {
+        std::swap(_data, other._data);
+        this->_size = other._size;
+        return *this;
+    }
+
     explicit Frame(void* buffer) {
         _data = new std::vector<long*>();
         _size = *(size_t*)buffer;
@@ -53,6 +79,14 @@ public:
 
     ~Frame() {
         delete _data;
+    }
+
+    long* at(size_t index) {
+        return _data->at(index);
+    }
+
+    size_t size() {
+        return _size;
     }
 
 private:
