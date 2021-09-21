@@ -57,10 +57,10 @@ bool JSONSerDes::test(void* actual, PyObject* expected) {
     }
 
     long long e;
-    long long * a;
+    long * a;
     for (int i=0; i<pyListLen; i++) {
         e = PyLong_AsLongLong(PyList_GetItem(expected, i));
-        a = json->at(i).get<long long*>();
+        a = json->at(i).get<nlohmann::json::number_integer_t *>();
 
         if (e != *a) {
             return false;

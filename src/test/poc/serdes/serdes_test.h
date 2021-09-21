@@ -36,8 +36,6 @@ public:
         delete[] this->_data;
         this->_data = nullptr;
         this->_size = 0;
-
-        sizeof(int);
     }
 
     void set(void* src, size_t offset, size_t num_bytes) {

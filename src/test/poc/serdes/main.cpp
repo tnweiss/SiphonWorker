@@ -1,12 +1,9 @@
 //
 // Created by Tyler on 9/3/2021.
 //
-#define BOOST_PYTHON_STATIC_LIB
-#define HAVE_SNPRINTF
 #include <memory>
 #include <vector>
 #include <chrono>
-#include <ctime>
 #include "boost/python.hpp"
 #include "nlohmann/json.hpp"
 
@@ -15,6 +12,7 @@
 #include "BASESerDes.h"
 #include "FrameSerDes.h"
 #include "PyJSON.h"
+#include "PartitionedFrame.h"
 #include "util.h"
 
 
@@ -31,10 +29,11 @@ int main () {
     tests.push_back(std::unique_ptr<SerDesTest>(new BASESerDes())); // used as a baseline to ensure measurements are not effected by copying resources
     tests.push_back(std::unique_ptr<SerDesTest>(new FrameSerDes())); // used as a baseline to ensure measurements are not effected by copying resources
     tests.push_back(std::unique_ptr<SerDesTest>(new PyJSON())); // used as a baseline to ensure measurements are not effected by copying resources
+    tests.push_back(std::unique_ptr<SerDesTest>(new PartitionedFrame()));
 
     //                1Kb   50kb   100kb   500kb   1Mb      5Mb      10Mb      50Mb
     //int sizeTestsB[] {1024, 51200, 102400, 512000, 1048576, 5242880, 10485760, 52428800};
-    int sizeTestsB[] {1024, 51200, 102400, 512000, 1048576, 5242880};
+    int sizeTestsB[] {1024, 51200, 102400};
 
     // for logging
     unsigned int totalTests = (sizeof (sizeTestsB) / sizeof(int)) * tests.size();

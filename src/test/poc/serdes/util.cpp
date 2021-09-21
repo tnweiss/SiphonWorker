@@ -94,7 +94,7 @@ void endTest(const std::string& _type, int _size, unsigned long _durationUs, boo
 void startTest(const std::string& _type, int _size, unsigned int & currentCount, unsigned int total) {
     std::cout << std::setw(3) << std::right << currentCount << "/";
     std::cout << std::setw(3) << std::left << total;
-    std::cout << std::setw(10) << std::left << _type << std::setw(16) << humanSize(_size);
+    std::cout << std::setw(12) << std::left << _type << std::setw(16) << humanSize(_size);
     currentCount ++;
 }
 

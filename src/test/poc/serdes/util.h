@@ -14,7 +14,7 @@
 #ifdef _WIN64
 static const char* log_dir = R"(C:\Temp\logs\siphon\POC\SerDes\)";
 #else
-static const char* log_dir = "/tmp/logs/siphon/POC/SerDes/"
+static const char* log_dir = "/tmp/logs/siphon/POC/SerDes/";
 #endif
 
 static const char *size_suffix[] = {"B", "KB", "MB", "GB", "TB"};
