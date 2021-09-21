@@ -6,9 +6,36 @@
 #include <algorithm>
 #include <thread>
 
-void add_to_data (PyObject*, std::vector<long*>& data, size_t start_idx, size_t num_elements) {
 
+void add_to_data (PyObject* data_array, std::vector<long*>* data_partition, size_t start_idx, size_t num_elements) {
+  // reserve enough elements for the current data set
+  data_partition->reserve(num_elements);
+
+  //
+  PyObject* curr_item;
+  for (auto i=static_cast<Py_ssize_t>(start_idx); i<num_elements; i++) {
+    curr_item = PyList_GetItem(data_array, i);
+
+    data_partition->emplace_back(new long(PyLong_AsLong(curr_item)));
+  }
 }
+
+
+void add_to_buffer (PyObject* data_array, void* buffer, size_t start_idx, size_t num_elements) {
+  // placeholder for data in the loop
+  long curr_item;
+
+  // set the buffer
+  auto* buff_i = (int8_t*)buffer;
+  buff_i += start_idx * num_elements * sizeof(long);
+
+  for (auto i=static_cast<Py_ssize_t>(start_idx); i<num_elements; i++, buff_i += 4) {
+    curr_item = PyLong_AsLong(PyList_GetItem(data_array, i));
+
+    memcpy(buff_i, &curr_item, 4);
+  }
+}
+
 
 void ttt() {
 
@@ -16,7 +43,7 @@ void ttt() {
 
 
 PFrame::PFrame(PyObject* data, size_t num_threads) {
-  _data = new std::vector<std::vector<long*>>();
+  _data = new std::vector<std::vector<long*>*>();
   _data->reserve(num_threads);
 
   const size_t data_size = PyList_Size(data);
@@ -28,7 +55,7 @@ PFrame::PFrame(PyObject* data, size_t num_threads) {
 
   for (int i=0; i<num_threads; i++, current_idx += max_per_thread) {
     _data->emplace_back();
-    //add_to_data(data, _data->at(i), current_idx, std::min(max_per_thread, data_size - current_idx));
+    t.emplace_back(add_to_data, data, _data->at(i), current_idx, std::min(max_per_thread, data_size - current_idx));
     t.emplace_back(ttt);
   }
 
@@ -67,7 +94,7 @@ DataContainer PFrame::data_container() const {
 }
 
 PFrame::~PFrame() {
-
+  delete _data;
 }
 
 const long *const PFrame::at(size_t index) {

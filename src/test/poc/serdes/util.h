@@ -5,7 +5,6 @@
 #define UTIL_H_
 
 #define BOOST_PYTHON_STATIC_LIB
-#define HAVE_SNPRINTF
 #include <vector>
 #include <chrono>
 #include "boost/python.hpp"

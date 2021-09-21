@@ -6,9 +6,7 @@
 #define SIPHON_SERDES_TEST_H
 
 
-#include <memory>
-#include <iostream>
-
+#include "serdes_test_pch.h"
 #include "boost/python.hpp"
 
 

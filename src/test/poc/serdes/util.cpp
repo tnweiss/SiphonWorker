@@ -143,6 +143,6 @@ void writeCheckpoints(std::vector<nlohmann::json>& checkpoints, const char* test
 std::string generate_test_id() {
     auto now = std::chrono::system_clock::now();
     char buffer[30];
-    std::sprintf(buffer, "%lld", std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count());
+    std::sprintf(buffer, "%lid", std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count());
     return (buffer);
 }

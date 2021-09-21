@@ -37,9 +37,10 @@ class PFrame {
   const size_t size();
 
  private:
+  const char* _type = "PFrame-4";
   size_t _size;
   size_t _typeSize;
-  std::vector<std::vector<long*>>* _data;
+  std::vector<std::vector<long*>*>* _data;
 };
 
 #endif //SIPHON_SRC_TEST_POC_SERDES_PARTITIONEDFRAME_H_
