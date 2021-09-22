@@ -7,7 +7,7 @@
 #include <thread>
 
 
-void add_to_data (PyObject* data_array, std::vector<long*>* data_partition, size_t start_idx, size_t num_elements) {
+void add_to_vector (PyObject* data_array, std::vector<long*>* data_partition, size_t start_idx, size_t num_elements) {
   // reserve enough elements for the current data set
   data_partition->reserve(num_elements);
 
@@ -37,9 +37,20 @@ void add_to_buffer (PyObject* data_array, void* buffer, size_t start_idx, size_t
 }
 
 
-void ttt() {
+void add_to_data_container(PyObject* in_data, DataContainer* dc, size_t start_idx, size_t num_elements) {
+  size_t offset = start_idx;
+  size_t dataSize = sizeof(long);
 
+  PyObject *value;
+  for (int i=0; i<num_elements; i++, offset += dataSize) {
+    value = PyList_GetItem(in_data, i);
+
+    dc->set(PyLong_AsLong(value), offset, dataSize);
+  }
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////
 
 
 PFrame::PFrame(PyObject* data, size_t num_threads) {
@@ -55,8 +66,7 @@ PFrame::PFrame(PyObject* data, size_t num_threads) {
 
   for (int i=0; i<num_threads; i++, current_idx += max_per_thread) {
     _data->emplace_back();
-    t.emplace_back(add_to_data, data, _data->at(i), current_idx, std::min(max_per_thread, data_size - current_idx));
-    t.emplace_back(ttt);
+    t.emplace_back(add_to_vector, data, _data->at(i), current_idx, std::min(max_per_thread, data_size - current_idx));
   }
 
   for (std::thread& th: t) {
@@ -105,27 +115,55 @@ const size_t PFrame::size() {
   return 0;
 }
 
+PFrame::PFrame(DataContainer& dc) {
+
+}
+
 //////////////////////// Partitioned Frame ////////////////////////
 bool PartitionedFrame::test(void *, PyObject *) {
   return true;
 }
 
-void PartitionedFrame::delete_deserialized_data(void *) {
-
+void PartitionedFrame::delete_deserialized_data(void * data) {
+  delete (PFrame*)data;
 }
 
-DataContainer PartitionedFrame::serialize(void *) {
-  return DataContainer();
+DataContainer PartitionedFrame::serialize(void * data) {
+  auto* pf = (PFrame*)data;
+
+  return pf->data_container();
 }
 
-void *PartitionedFrame::deserialize(DataContainer &) {
-  return nullptr;
+void *PartitionedFrame::deserialize(DataContainer& dc) {
+  return new PFrame(dc);
 }
 
-DataContainer PartitionedFrame::serialize(PyObject *) {
-  return DataContainer();
+
+DataContainer PartitionedFrame::serialize(PyObject * data) {
+  // get the size of the data and the partition size
+  const size_t data_size = PyList_Size(data);
+  const size_t max_per_thread = std::ceil(data_size / _num_partitions);
+  DataContainer dc((data_size * sizeof(long)) + sizeof(size_t));
+
+  size_t current_idx = 0;
+  std::vector<std::thread> t{};
+  t.reserve(_num_partitions);
+
+  // copy the number of elements on to the buffer
+  dc.set((long) &data_size, current_idx, sizeof(size_t));
+  current_idx += sizeof(size_t);
+
+  for (int i=0; i<_num_partitions; i++, current_idx += max_per_thread) {
+    t.emplace_back(add_to_data_container, data, &dc, current_idx, std::min(max_per_thread, data_size - current_idx));
+  }
+
+  for (std::thread& th: t) {
+    th.join();
+  }
+
+  return dc;
 }
 
 const char *PartitionedFrame::type() {
-  return "PFrame-XP" ;
+  return _type;
 }
