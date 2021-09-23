@@ -7,6 +7,7 @@
 
 #include "serdes_test.h"
 
+
 ///////////////////////// Static Thread Safe /////////////////////////
 //void py_to_vector (PyObject*, std::vector<long*>*, size_t, size_t);
 void bytes_to_vector (const int8_t*, std::vector<long*>*, size_t);

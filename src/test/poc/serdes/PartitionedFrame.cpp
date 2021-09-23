@@ -3,8 +3,6 @@
 //
 
 #include "PartitionedFrame.h"
-#include <algorithm>
-#include <thread>
 
 
 void bytes_to_vector (const int8_t* data_array, std::vector<long*>* data_partition, size_t num_elements) {

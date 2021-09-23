@@ -7,6 +7,7 @@
 
 #include "serdes_test.h"
 
+
 class BASESerDes: public SerDesTest {
 public:
     const char* type() final;

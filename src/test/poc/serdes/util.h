@@ -4,10 +4,8 @@
 #ifndef UTIL_H_
 #define UTIL_H_
 
-#define BOOST_PYTHON_STATIC_LIB
 #include <vector>
 #include <chrono>
-#include "boost/python.hpp"
 #include "nlohmann/json.hpp"
 
 #ifdef _WIN64

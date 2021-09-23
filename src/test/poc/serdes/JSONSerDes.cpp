@@ -1,7 +1,6 @@
 //
 // Created by Tyler on 9/3/2021.
 //
-#define BOOST_PYTHON_STATIC_LIB
 #include "JSONSerDes.h"
 
 
@@ -60,7 +59,7 @@ bool JSONSerDes::test(void* actual, PyObject* expected) {
     long * a;
     for (int i=0; i<pyListLen; i++) {
         e = PyLong_AsLongLong(PyList_GetItem(expected, i));
-        a = json->at(i).get<nlohmann::json::number_integer_t *>();
+        a = reinterpret_cast<long*>(json->at(i).get<nlohmann::json::number_integer_t *>());
 
         if (e != *a) {
             return false;

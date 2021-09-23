@@ -1,7 +1,6 @@
 //
 // Created by Tyler on 9/4/2021.
 //
-#define BOOST_PYTHON_STATIC_LIB
 #include "BASESerDes.h"
 
 

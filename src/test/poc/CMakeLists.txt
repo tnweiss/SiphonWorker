@@ -9,12 +9,13 @@ add_executable(serdesPOC
         serdes/util.h
         serdes/PyJSON.cpp
         serdes/PyJSON.h
-        serdes/PartitionedFrame.cpp)
+        serdes/PartitionedFrame.cpp serdes/main_pch.h)
 target_link_libraries( serdesPOC PUBLIC ${PYTHON_LIBRARIES} ${LIB_BOOST_PYTHON})
 target_precompile_headers(serdesPOC
         PUBLIC ../../../dependencies/include/boost/python.hpp
         PUBLIC ../../../dependencies/include/nlohmann/json.hpp
-        PUBLIC serdes/serdes_test_pch.h)
+        PUBLIC serdes/serdes_test_pch.h
+        PUBLIC serdes/main_pch.h)
 
 #ADD_LIBRARY( t SHARED t.cpp)
 #target_link_libraries( t PRIVATE ${PYTHON_LIBRARIES} ${LIB_BOOST_PYTHON})

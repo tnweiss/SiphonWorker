@@ -15,8 +15,13 @@ find_package(PythonLibs 3.8 REQUIRED)
 
 
 ####### Dependencies ##########
-link_directories(${DEP_LINK} ${PYTHON_LIBRARIES})
-include_directories(${DEP_INCLUDE} ${PYTHON_INCLUDE_DIR})
+link_directories(dependencies/lib ${PYTHON_LIBRARIES})
+include_directories(dependencies/include ${PYTHON_INCLUDE_DIR})
+
+
+####### Boost Compilation ##########
+add_compile_definitions(BOOST_ALL_NO_LIB )  # disables auto linking
+add_compile_definitions(BOOST_PYTHON_STATIC_LIB  )  # tells boost we are statically linking
 
 
 ########## Include the src subdirectory ##########

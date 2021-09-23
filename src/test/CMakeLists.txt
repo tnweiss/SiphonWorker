@@ -18,7 +18,7 @@ add_executable(commonTest
 
 target_link_libraries(commonTest PRIVATE
         siphon_common
-        ${PYTHON_LIBRARIES}
+        ${LIB_BOOST_PYTHON}
         ${LIB_BOOST_SERIALIZATION}
         )
 

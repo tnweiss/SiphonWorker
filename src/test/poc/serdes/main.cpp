@@ -1,12 +1,8 @@
 //
 // Created by Tyler on 9/3/2021.
 //
-#include <memory>
-#include <vector>
-#include <chrono>
-#include "boost/python.hpp"
-#include "nlohmann/json.hpp"
 
+#include "main_pch.h"
 #include "serdes_test.h"
 #include "JSONSerDes.h"
 #include "BASESerDes.h"
@@ -35,16 +31,19 @@ int main () {
     tests.push_back(std::unique_ptr<SerDesTest>(new PartitionedFrame(4))); // threaded frame with 4 threads for SerDes
     tests.push_back(std::unique_ptr<SerDesTest>(new PartitionedFrame(5))); // threaded frame with 5 threads for SerDes
     tests.push_back(std::unique_ptr<SerDesTest>(new PartitionedFrame(6))); // threaded frame with 6 threads for SerDes
-    tests.push_back(std::unique_ptr<SerDesTest>(new PartitionedFrame(7))); // threaded frame with 7 threads for SerDes
-    tests.push_back(std::unique_ptr<SerDesTest>(new PartitionedFrame(8))); // threaded frame with 8 threads for SerDes
-    tests.push_back(std::unique_ptr<SerDesTest>(new PartitionedFrame(9))); // threaded frame with 9 threads for SerDes
 
     //                1Kb   50kb   100kb   500kb   1Mb      5Mb      10Mb      50Mb
     //int sizeTestsB[] {1024, 51200, 102400, 512000, 1048576, 5242880, 10485760, 52428800};
     int sizeTestsB[] {1024, 51200, 102400, 512000, 1048576, 5242880, 10485760};
 
+    // number of times to run the test
+    static const short num_iterations = 4;
+
+    // random number generator for shuffling the tests
+    auto rng = std::default_random_engine (std::stoi(test_id));
+
     // for logging
-    unsigned int totalTests = (sizeof (sizeTestsB) / sizeof(int)) * tests.size();
+    unsigned int totalTests = (sizeof (sizeTestsB) / sizeof(int)) * tests.size() * num_iterations;
 
     unsigned int currentTest = 1;
 
@@ -60,54 +59,57 @@ int main () {
     void* deserializedData;
     void* output;
 
-    // for each data set size, run each test
-    for (const int testSize: sizeTestsB) {
-        // generate the test data, imitate data coming from python program
-        PyObject* td = data(testSize);
+    for (short iteration=0; iteration<num_iterations; iteration++) {
+        // for each data set size, run each test
+        for (const int testSize: sizeTestsB) {
+            // generate the test data, imitate data coming from python program
+            PyObject* td = data(testSize);
 
-        for (const std::unique_ptr<SerDesTest>& t: tests) {
-            // log the start
-            startTest(t->type(), testSize, currentTest, totalTests);
+            std::shuffle( tests.begin(), tests.end(), rng);
+            for (const std::unique_ptr<SerDesTest>& t: tests) {
+                // log the start
+                startTest(t->type(), testSize, currentTest, totalTests);
 
-            // mark start, ser/des mark end
-            last_checkpoint = std::chrono::steady_clock::now();
-            start = std::chrono::steady_clock::now();
+                // mark start, ser/des mark end
+                last_checkpoint = std::chrono::steady_clock::now();
+                start = std::chrono::steady_clock::now();
 
-            serializedData = t->serialize(td);                                      // Python -> Redis
-            checkpoints.push_back(checkpoint(t->type(), testSize,  "PythonToRedis", last_checkpoint));
+                serializedData = t->serialize(td);                                      // Python -> Redis
+                checkpoints.push_back(checkpoint(t->type(), testSize,  "PythonToRedis", last_checkpoint));
 
-            deserializedData = t->deserialize(serializedData);            // Redis -> Container
-            checkpoints.push_back(checkpoint(t->type(), testSize,  "RedisToContainer", last_checkpoint));
+                deserializedData = t->deserialize(serializedData);            // Redis -> Container
+                checkpoints.push_back(checkpoint(t->type(), testSize,  "RedisToContainer", last_checkpoint));
 
-            serializedData2 = t->serialize(deserializedData);                                                     // Container -> Redis
-            checkpoints.push_back(checkpoint(t->type(), testSize,  "ContainerToRedis", last_checkpoint));
+                serializedData2 = t->serialize(deserializedData);                                                     // Container -> Redis
+                checkpoints.push_back(checkpoint(t->type(), testSize,  "ContainerToRedis", last_checkpoint));
 
-            // mark the end of the test
-            end = std::chrono::steady_clock::now();
+                // mark the end of the test
+                end = std::chrono::steady_clock::now();
 
-            // make sure there was no loss of data
-            output = t->deserialize(serializedData2);
-            if (!t->test(output, td)) {
-                std::cout << "\n\nFaulty Test (" << t->type() << ") did not pass test" << std::endl;
-                exit(1);
+                // make sure there was no loss of data
+                output = t->deserialize(serializedData2);
+                if (!t->test(output, td)) {
+                    std::cout << "\n\nFaulty Test (" << t->type() << ") did not pass test" << std::endl;
+                    exit(1);
+                }
+
+                // log the end
+                // TODO add test to ensure proper serialization
+                duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+                endTest(t->type(), testSize, duration,true, test_id.c_str());
+
+                // cleanup
+                t->delete_deserialized_data(deserializedData);
+                t->delete_deserialized_data(output);
+                serializedData.clear();
+                serializedData2.clear();
             }
 
-            // log the end
-            // TODO add test to ensure proper serialization
-            duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-            endTest(t->type(), testSize, duration,true, test_id.c_str());
+            // write the checkpoints
+            writeCheckpoints(checkpoints, test_id.c_str());
 
-            // cleanup
-            t->delete_deserialized_data(deserializedData);
-            t->delete_deserialized_data(output);
-            serializedData.clear();
-            serializedData2.clear();
+            // delete the test data
+            boost::python::decref(td);
         }
-
-        // write the checkpoints
-        writeCheckpoints(checkpoints, test_id.c_str());
-
-        // delete the test data
-        boost::python::decref(td);
     }
 }

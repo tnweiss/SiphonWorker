@@ -5,8 +5,6 @@
 #ifndef SIPHON_JSONSERDES_H
 #define SIPHON_JSONSERDES_H
 
-#include "nlohmann/json.hpp"
-
 #include "serdes_test.h"
 
 

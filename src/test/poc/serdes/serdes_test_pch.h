@@ -7,5 +7,9 @@
 
 #include <memory>
 #include <iostream>
+#include <algorithm>
+#include <thread>
+#include "boost/python.hpp"
+#include "nlohmann/json.hpp"
 
 #endif //SIPHON_SRC_TEST_POC_SERDES_SERDES_TEST_PCH_H_

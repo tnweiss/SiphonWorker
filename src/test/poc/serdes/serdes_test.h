@@ -7,7 +7,6 @@
 
 
 #include "serdes_test_pch.h"
-#include "boost/python.hpp"
 
 
 class DataContainer {

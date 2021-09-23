@@ -1,7 +1,7 @@
 //
 // Created by Tyler on 9/8/2021.
 //
-#define BOOST_PYTHON_STATIC_LIB
+
 #include "FrameSerDes.h"
 
 const char* FrameSerDes::type() {
