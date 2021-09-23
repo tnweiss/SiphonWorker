@@ -8,10 +8,11 @@
 #include "serdes_test.h"
 
 ///////////////////////// Static Thread Safe /////////////////////////
-void add_to_vector (PyObject* data_array, std::vector<long*>* data_partition, size_t start_idx, size_t num_elements);
-void add_to_buffer (PyObject* data_array, void* buffer, size_t start_idx, size_t num_elements);
-void add_to_data_container(PyObject* in_data, DataContainer* dc, size_t start_idx, size_t num_elements);
-
+//void py_to_vector (PyObject*, std::vector<long*>*, size_t, size_t);
+void bytes_to_vector (const int8_t*, std::vector<long*>*, size_t);
+//void py_to_buffer (PyObject*, void*, size_t, size_t);
+void py_to_data_container(PyObject*, DataContainer*, size_t, size_t, size_t);
+void vector_to_data_container (std::vector<long*>*, DataContainer*, size_t);
 
 
 class PartitionedFrame: public SerDesTest {
@@ -35,9 +36,7 @@ class PartitionedFrame: public SerDesTest {
 
 class PFrame {
  public:
-  PFrame(DataContainer&);
-  PFrame(PyObject*, size_t);
-  PFrame(void*, size_t);
+  PFrame(DataContainer&, size_t);
   // copy constructor
   PFrame(const PFrame&);
   // move constructor
@@ -45,16 +44,14 @@ class PFrame {
   // copy assignment
   PFrame& operator=(const PFrame&);
   // move assignment
-  PFrame operator=(PFrame&&) noexcept;
-  explicit PFrame(void*);
+  PFrame& operator=(PFrame&&) noexcept;
   [[nodiscard]] DataContainer data_container() const;
   ~PFrame();
-  const long* const at(size_t index);
-  const size_t size();
+  const long* at(size_t index);
+  size_t size();
+  std::vector<long*> flatten();
 
  private:
-  size_t _size;
-  size_t _typeSize;
   std::vector<std::vector<long*>*>* _data;
 };
 

@@ -40,6 +40,10 @@ public:
         memcpy(_data + offset, src, num_bytes);
     }
 
+    void set(const size_t* src, size_t offset) {
+      memcpy(_data + offset, src, 8);
+    }
+
     void set(long src, size_t offset, size_t num_bytes) {
         memcpy(_data + offset, &src, num_bytes);
     }

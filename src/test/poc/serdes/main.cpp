@@ -24,16 +24,24 @@ int main () {
     Py_Initialize();
 
     // add all the tests
+    // TODO shuffle tests
     std::vector<std::unique_ptr<SerDesTest>> tests{};
-    tests.push_back(std::unique_ptr<SerDesTest>(new JSONSerDes())); // using nlohmann/json to serialize / deserialize to json
     tests.push_back(std::unique_ptr<SerDesTest>(new BASESerDes())); // used as a baseline to ensure measurements are not effected by copying resources
-    tests.push_back(std::unique_ptr<SerDesTest>(new FrameSerDes())); // used as a baseline to ensure measurements are not effected by copying resources
-    tests.push_back(std::unique_ptr<SerDesTest>(new PyJSON())); // used as a baseline to ensure measurements are not effected by copying resources
-    tests.push_back(std::unique_ptr<SerDesTest>(new PartitionedFrame(4)));
+    tests.push_back(std::unique_ptr<SerDesTest>(new JSONSerDes())); // using nlohmann/json to serialize / deserialize to json
+    tests.push_back(std::unique_ptr<SerDesTest>(new PyJSON())); // uses python json to deserialize / serialize data
+    tests.push_back(std::unique_ptr<SerDesTest>(new FrameSerDes())); // uses frame data structure
+    tests.push_back(std::unique_ptr<SerDesTest>(new PartitionedFrame(2))); // threaded frame with 2 threads for SerDes
+    tests.push_back(std::unique_ptr<SerDesTest>(new PartitionedFrame(3))); // threaded frame with 3 threads for SerDes
+    tests.push_back(std::unique_ptr<SerDesTest>(new PartitionedFrame(4))); // threaded frame with 4 threads for SerDes
+    tests.push_back(std::unique_ptr<SerDesTest>(new PartitionedFrame(5))); // threaded frame with 5 threads for SerDes
+    tests.push_back(std::unique_ptr<SerDesTest>(new PartitionedFrame(6))); // threaded frame with 6 threads for SerDes
+    tests.push_back(std::unique_ptr<SerDesTest>(new PartitionedFrame(7))); // threaded frame with 7 threads for SerDes
+    tests.push_back(std::unique_ptr<SerDesTest>(new PartitionedFrame(8))); // threaded frame with 8 threads for SerDes
+    tests.push_back(std::unique_ptr<SerDesTest>(new PartitionedFrame(9))); // threaded frame with 9 threads for SerDes
 
     //                1Kb   50kb   100kb   500kb   1Mb      5Mb      10Mb      50Mb
     //int sizeTestsB[] {1024, 51200, 102400, 512000, 1048576, 5242880, 10485760, 52428800};
-    int sizeTestsB[] {52428800};
+    int sizeTestsB[] {1024, 51200, 102400, 512000, 1048576, 5242880, 10485760};
 
     // for logging
     unsigned int totalTests = (sizeof (sizeTestsB) / sizeof(int)) * tests.size();
@@ -80,7 +88,7 @@ int main () {
             // make sure there was no loss of data
             output = t->deserialize(serializedData2);
             if (!t->test(output, td)) {
-                std::cout << "Faulty Test (" << t->type() << ") did not pass test" << std::endl;
+                std::cout << "\n\nFaulty Test (" << t->type() << ") did not pass test" << std::endl;
                 exit(1);
             }
 
