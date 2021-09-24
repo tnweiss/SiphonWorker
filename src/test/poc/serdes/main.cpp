@@ -2,7 +2,6 @@
 // Created by Tyler on 9/3/2021.
 //
 
-#include "main_pch.h"
 #include "serdes_test.h"
 #include "JSONSerDes.h"
 #include "BASESerDes.h"
@@ -32,9 +31,9 @@ int main () {
     tests.push_back(std::unique_ptr<SerDesTest>(new PartitionedFrame(5))); // threaded frame with 5 threads for SerDes
     tests.push_back(std::unique_ptr<SerDesTest>(new PartitionedFrame(6))); // threaded frame with 6 threads for SerDes
 
-    //                1Kb   50kb   100kb   500kb   1Mb      5Mb      10Mb      50Mb
-    //int sizeTestsB[] {1024, 51200, 102400, 512000, 1048576, 5242880, 10485760, 52428800};
-    int sizeTestsB[] {1024, 51200, 102400, 512000, 1048576, 5242880, 10485760};
+    //                1Kb   5kb   10kb   50kb   100kb   300kb   500kb   800kb   1Mb      3mb      5Mb      8mb      10Mb      25mb      50Mb      75mb
+    int sizeTestsB[] {1024, 5120, 10240, 51200, 102400, 307200, 512000, 819200, 1048576, 3145728, 5242880, 8388608, 10485760, 26214400, 52428800, 78643200};
+    //int sizeTestsB[] {1024, 51200, 102400, 512000, 1048576, 5242880, 10485760};
 
     // number of times to run the test
     static const short num_iterations = 4;
@@ -75,13 +74,13 @@ int main () {
                 start = std::chrono::steady_clock::now();
 
                 serializedData = t->serialize(td);                                      // Python -> Redis
-                checkpoints.push_back(checkpoint(t->type(), testSize,  "PythonToRedis", last_checkpoint));
+                checkpoints.push_back(checkpoint(t->type(), testSize,  "1-PythonToRedis", last_checkpoint));
 
                 deserializedData = t->deserialize(serializedData);            // Redis -> Container
-                checkpoints.push_back(checkpoint(t->type(), testSize,  "RedisToContainer", last_checkpoint));
+                checkpoints.push_back(checkpoint(t->type(), testSize,  "2-RedisToContainer", last_checkpoint));
 
                 serializedData2 = t->serialize(deserializedData);                                                     // Container -> Redis
-                checkpoints.push_back(checkpoint(t->type(), testSize,  "ContainerToRedis", last_checkpoint));
+                checkpoints.push_back(checkpoint(t->type(), testSize,  "3-ContainerToRedis", last_checkpoint));
 
                 // mark the end of the test
                 end = std::chrono::steady_clock::now();
