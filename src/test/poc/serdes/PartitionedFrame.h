@@ -18,9 +18,7 @@ void vector_to_data_container (std::vector<long*>*, DataContainer*, size_t);
 
 class PartitionedFrame: public SerDesTest {
  public:
-  explicit PartitionedFrame(int num_threads):
-    _type(new char[9 + static_cast<int>(std::floor(std::log10(num_threads) + 1))]),
-    _num_partitions(num_threads){
+  explicit PartitionedFrame(int num_threads): _num_partitions(num_threads){
     std::sprintf(_type, "PFrame-%i", num_threads);
   };
   const char* type() final;
@@ -30,7 +28,7 @@ class PartitionedFrame: public SerDesTest {
   void delete_deserialized_data(void*) final;
   bool test(void*, PyObject*) final;
  private:
-  char* const _type;
+  char _type[20]{};
   const int _num_partitions;
 };
 

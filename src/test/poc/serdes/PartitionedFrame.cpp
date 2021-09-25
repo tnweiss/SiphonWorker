@@ -101,7 +101,14 @@ DataContainer PFrame::data_container() const {
 }
 
 PFrame::~PFrame() {
-  delete _data;
+      if (_data == nullptr) {
+        return;
+    }
+
+    for (std::vector<long*>* li: *_data) {
+        delete li;
+    }
+    delete _data;
 }
 
 const long *PFrame::at(size_t index) {
