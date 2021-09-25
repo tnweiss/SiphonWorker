@@ -21,3 +21,5 @@ ADD_LIBRARY( siphon_common
         )
 
 target_include_directories(siphon_common PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
+
+add_subdirectory(data)
