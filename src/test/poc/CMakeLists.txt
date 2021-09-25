@@ -1,31 +1,4 @@
-add_executable(serdesPOC
-        serdes/main.cpp
-        serdes/serdes_test.h
-        serdes/JSONSerDes.cpp
-        serdes/BASESerDes.cpp
-        serdes/FrameSerDes.cpp
-        serdes/FrameSerDes.h
-        serdes/util.cpp
-        serdes/util.h
-        serdes/PyJSON.cpp
-        serdes/PyJSON.h
-        serdes/PartitionedFrame.cpp serdes/main_pch.h)
-target_link_libraries( serdesPOC PUBLIC ${PYTHON_LIBRARIES} ${LIB_BOOST_PYTHON})
-target_precompile_headers(serdesPOC
-        PUBLIC ../../../dependencies/include/boost/python.hpp
-        PUBLIC ../../../dependencies/include/nlohmann/json.hpp
-        PUBLIC serdes/serdes_test_pch.h
-        PUBLIC serdes/main_pch.h)
+############## Proof of Concept tests ##############
 
-#ADD_LIBRARY( t SHARED t.cpp)
-#target_link_libraries( t PRIVATE ${PYTHON_LIBRARIES} ${LIB_BOOST_PYTHON})
-#
-#set_target_properties(t PROPERTIES PREFIX "")
-#set_target_properties(t PROPERTIES OUTPUT_NAME "t")
-#set_target_properties(t PROPERTIES SUFFIX ".pyd")
-#
-#
-#add_executable(m main.cpp)
-#message(${LIB_BOOST_PYTHON})
-#message(${PYTHON_LIBRARIES})
-#target_link_libraries( m PUBLIC ${PYTHON_LIBRARIES} ${LIB_BOOST_PYTHON})
+# SerDes proof of concept test
+add_subdirectory(serdes)
