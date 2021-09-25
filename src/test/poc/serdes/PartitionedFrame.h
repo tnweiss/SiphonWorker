@@ -10,7 +10,7 @@
 
 ///////////////////////// Static Thread Safe /////////////////////////
 //void py_to_vector (PyObject*, std::vector<long*>*, size_t, size_t);
-void bytes_to_vector (const int8_t*, std::vector<long*>*, size_t);
+void bytes_to_vector (int8_t*, std::vector<long*>*, size_t);
 //void py_to_buffer (PyObject*, void*, size_t, size_t);
 void py_to_data_container(PyObject*, DataContainer*, size_t, size_t, size_t);
 void vector_to_data_container (std::vector<long*>*, DataContainer*, size_t);
@@ -46,9 +46,8 @@ class PFrame {
   PFrame& operator=(PFrame&&) noexcept;
   [[nodiscard]] DataContainer data_container() const;
   ~PFrame();
-  const long* at(size_t index);
+  long* at(size_t index);
   size_t size();
-  std::vector<long*> flatten();
 
  private:
   std::vector<std::vector<long*>*>* _data;

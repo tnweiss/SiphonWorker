@@ -21,9 +21,9 @@ int main () {
     // add all the tests
     // TODO shuffle tests
     std::vector<std::unique_ptr<SerDesTest>> tests{};
-    tests.push_back(std::unique_ptr<SerDesTest>(new BASESerDes())); // used as a baseline to ensure measurements are not effected by copying resources
-    tests.push_back(std::unique_ptr<SerDesTest>(new JSONSerDes())); // using nlohmann/json to serialize / deserialize to json
-    tests.push_back(std::unique_ptr<SerDesTest>(new PyJSON())); // uses python json to deserialize / serialize data
+    //tests.push_back(std::unique_ptr<SerDesTest>(new BASESerDes())); // used as a baseline to ensure measurements are not effected by copying resources
+    //tests.push_back(std::unique_ptr<SerDesTest>(new JSONSerDes())); // using nlohmann/json to serialize / deserialize to json
+    //tests.push_back(std::unique_ptr<SerDesTest>(new PyJSON())); // uses python json to deserialize / serialize data
     tests.push_back(std::unique_ptr<SerDesTest>(new FrameSerDes())); // uses frame data structure
     tests.push_back(std::unique_ptr<SerDesTest>(new PartitionedFrame(2))); // threaded frame with 2 threads for SerDes
     tests.push_back(std::unique_ptr<SerDesTest>(new PartitionedFrame(3))); // threaded frame with 3 threads for SerDes
@@ -33,10 +33,10 @@ int main () {
 
     //                1Kb   5kb   10kb   50kb   100kb   300kb   500kb   800kb   1Mb      3mb      5Mb      8mb      10Mb      25mb      50Mb      75mb
     int sizeTestsB[] {1024, 5120, 10240, 51200, 102400, 307200, 512000, 819200, 1048576, 3145728, 5242880, 8388608, 10485760, 26214400, 52428800, 78643200};
-    //int sizeTestsB[] {1024, 51200, 102400, 512000, 1048576, 5242880, 10485760};
+    //int sizeTestsB[] {5242880};
 
     // number of times to run the test
-    static const short num_iterations = 4;
+    static const short num_iterations = 5;
 
     // random number generator for shuffling the tests
     auto rng = std::default_random_engine (std::stoi(test_id));

@@ -3,19 +3,22 @@
 //
 
 #include "PartitionedFrame.h"
+#include <thread>
 
 
-void bytes_to_vector (const int8_t* data_array, std::vector<long*>* data_partition, size_t num_elements) {
-  // reserve enough elements for the current data set
-  data_partition->reserve(num_elements);
+void bytes_to_vector (int8_t* data_array, std::vector<long*>* data_partition, size_t num_elements) {
+  // get the pointer to the memory space of the vector
+  long** data_partition_data = data_partition->data();
 
-  size_t data_size = sizeof(long);
-  auto* current_idx = const_cast<int8_t*>(data_array);  // copy the pointer
+  // interpret the incoming data as an array of long
+  auto* current_idx = (long*)data_array;
 
   for (int i=0; i<num_elements; i++) {
-    data_partition->emplace_back((long*)current_idx);
+    // copy each pointer over
+    memcpy(data_partition_data, &current_idx, sizeof(current_idx));
 
-    current_idx += data_size;
+    data_partition_data += 1;
+    current_idx += 1;
   }
 }
 
@@ -54,7 +57,9 @@ PFrame::PFrame(const PFrame &) {
 
 // move
 PFrame::PFrame(PFrame && other) noexcept {
-  _data = std::exchange(other._data, nullptr);
+    _data = other._data;
+    other._data = nullptr;
+    std::cout << "move" << std::endl;
 }
 
 // copy assign
@@ -65,7 +70,9 @@ PFrame &PFrame::operator=(const PFrame &) {
 
 // move assign
 PFrame& PFrame::operator=(PFrame && other) noexcept {
-  std::swap(_data, other._data);
+    _data = other._data;
+    other._data = nullptr;
+    std::cout << "move assign" << std::endl;
   return *this;
 }
 
@@ -111,9 +118,9 @@ PFrame::~PFrame() {
     delete _data;
 }
 
-const long *PFrame::at(size_t index) {
+long *PFrame::at(size_t index) {
   for (std::vector<long*>* e: *_data) {
-    if (index > e->size()) {
+    if (index >= e->size()) {
       index -= e->size();
     } else {
       return e->at(index);
@@ -130,26 +137,13 @@ size_t PFrame::size() {
   return s;
 }
 
-std::vector<long*> PFrame::flatten() {
-  std::vector<long*> r_val{};
-  r_val.reserve(_data->at(0)->size() * _data->size());
-
-  for (std::vector<long*>* r: *_data) {
-    for (long* v: *r) {
-      r_val.push_back(v);
-    }
-  }
-
-  return r_val;
-}
-
 PFrame::PFrame(DataContainer& dc, size_t num_threads) {
   _data = new std::vector<std::vector<long*>*>();
   _data->reserve(num_threads);
 
   if (dc.size() == 0) {
     for (int i=0; i<num_threads; i++) {
-      _data->emplace_back(new std::vector<long*>());
+      _data->push_back(new std::vector<long*>());
     }
     return;
   }
@@ -169,10 +163,12 @@ PFrame::PFrame(DataContainer& dc, size_t num_threads) {
   t.reserve(num_threads);
 
   size_t element_count;
+  std::vector<long*>* partition;
   for (int i=0; i<num_threads; i++) {
-    _data->emplace_back(new std::vector<long*>());
-
     element_count = static_cast<size_t>(std::min(max_per_thread, data_size - current_idx));
+
+    partition = new std::vector<long*>(element_count);
+    _data->push_back(partition);
 
     t.emplace_back(bytes_to_vector, data, _data->at(i), element_count);
     data += sizeof(long) * element_count;
@@ -187,19 +183,18 @@ PFrame::PFrame(DataContainer& dc, size_t num_threads) {
 //////////////////////// Partitioned Frame ////////////////////////
 bool PartitionedFrame::test(void * data, PyObject * py_obj) {
   auto* pf = (PFrame*)data;
-  std::vector<long*> actual = pf->flatten();
   Py_ssize_t len = PyList_Size(py_obj);
 
-  if (actual.size() != len) {
-    std::cout << "\nLen mismatch, Actual: " << actual.size() << " Expected: " << len  << std::endl;
+  if (len != pf->size()) {
+    std::cout << "\nLen mismatch, Actual: " << pf->size() << " Expected: " << len  << std::endl;
     return false;
   }
 
   for (Py_ssize_t i=0; i<len; i++) {
-    if (PyLong_AsLong(PyList_GetItem(py_obj, i)) != *actual.at(i)) {
+    if (PyLong_AsLong(PyList_GetItem(py_obj, i)) != *pf->at(i)) {
       std::cout << "Val Mismatch at index: " << i << "/" << len << ", Excpected: " <<
         PyLong_AsLong(PyList_GetItem(py_obj, i)) <<
-        " != Actual: " << *actual.at(i) << std::endl;
+        " != Actual: " << pf->at(i) << std::endl;
       return false;
     }
   }
@@ -217,7 +212,9 @@ DataContainer PartitionedFrame::serialize(void * data) {
 }
 
 void *PartitionedFrame::deserialize(DataContainer& dc) {
-  return new PFrame(dc, _num_partitions);
+  auto* pf = new PFrame(dc, _num_partitions);
+
+  return pf;
 }
 
 
