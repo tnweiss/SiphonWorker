@@ -1,6 +1,15 @@
 ADD_LIBRARY( siphon_data
+        ####### Data Model #######
+        data_model/ser_des.h
+        data_model/exceptions.cpp
+        data_model/data_model.cpp
+        data_model/data_model_field.cpp
+        data_model/field_float.cpp
+        data_model/field_int.cpp
+
         ####### Deserializers #######
         deserializer/deserializer.h
+        deserializer/data_model_des.cpp
 
         ####### Frames #######
         frame/frame.h
@@ -13,9 +22,6 @@ ADD_LIBRARY( siphon_data
 
         ####### Writers #######
         writer/writer.h
-
-
         )
 
-####### Temporary #######
-set_target_properties(siphon_data PROPERTIES LINKER_LANGUAGE CXX)
+target_include_directories(siphon_data PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
