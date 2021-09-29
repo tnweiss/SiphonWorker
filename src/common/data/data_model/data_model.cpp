@@ -3,9 +3,9 @@
 //
 
 #include "data_model.h"
-#include "ser_des.h"
+#include "data_model/fields/ser_des.h"
 #include "exceptions.h"
-
+#include <cstring>
 
 DataModel::DataModel(int8_t type) {
   _type = 0;
@@ -84,12 +84,27 @@ int8_t DataModel::model_type() {
   return _type;
 }
 
-const char *DataModel::model_type_extended() {
+const char *DataModel::model_type_extended() const {
   for (std::pair<int8_t, const char*> dm_type: DM_TYPES) {
     if (dm_type.first == _type) {
       return dm_type.second;
     }
   }
 
-  exit(1);
+  throw siphon::UnknownDataModelCodeException(_type);
+}
+
+size_t DataModel::frame_accessor_id(const char * field) {
+  // if the current model is an array we will return an index
+  if (_type == DATA_MODEL_CODE_ARRAY) {
+    for (size_t i=0; i<_fields->size(); i++) {
+      if (strcmp(_fields->at(i)->name(), field) == 0) {
+        return i;
+      }
+    }
+
+    throw siphon::DataModelParseException("Field ", field, " Not found in the list of fields");
+  } else {
+    throw siphon::DataModelParseException("Not able to handle map at this time");
+  }
 }

@@ -6,6 +6,7 @@
 #define SIPHON_SRC_COMMON_DATA_DESERIALIZER_DESERIALIZER_H_
 
 #include "../frame/frame.h"
+#include <cstring>
 
 namespace siphon {
 

@@ -58,7 +58,14 @@ public:
    * Get the extended model type (string)
    * @return
    */
-  const char* model_type_extended();
+  [[nodiscard]] const char* model_type_extended() const;
+
+  /**
+   * Used to get an integer that can be used to get the requested
+   *   field more efficiently
+   * @return
+   */
+  size_t frame_accessor_id(const char*);
 
 private:
   std::vector<DataModelField*>* _fields;

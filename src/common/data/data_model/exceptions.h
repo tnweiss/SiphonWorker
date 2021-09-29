@@ -4,6 +4,7 @@
 
 #ifndef SIPHON_SRC_COMMON_DATA_DATA_MODEL_EXCEPTIONS_H_
 #define SIPHON_SRC_COMMON_DATA_DATA_MODEL_EXCEPTIONS_H_
+
 #include <exception>
 #include <string>
 
@@ -19,7 +20,8 @@ private:
 
 class UnknownDataModelCodeException : public std::exception {
 public:
-  explicit UnknownDataModelCodeException(const int8_t);
+  explicit UnknownDataModelCodeException(int8_t);
+  explicit UnknownDataModelCodeException(const char*);
   [[nodiscard]] const char *what() const noexcept override;
 private:
   std::string msg;

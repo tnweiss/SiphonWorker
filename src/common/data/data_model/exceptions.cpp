@@ -10,10 +10,10 @@ siphon::DataModelParseException::DataModelParseException(const char* msg...) {
 
   this->msg = std::string();
 
-  char* tmp;
   va_start(args, msg);
-  while (*tmp != '\0') {
-    this->msg.append(tmp);
+  while (*msg != '\0') {
+    this->msg.append(msg);
+    ++ msg;
   }
   va_end(args);
 }
@@ -30,4 +30,9 @@ siphon::UnknownDataModelCodeException::UnknownDataModelCodeException(
 
 const char *siphon::UnknownDataModelCodeException::what() const noexcept {
   return msg.c_str();
+}
+
+siphon::UnknownDataModelCodeException::UnknownDataModelCodeException(const char * unknown_extended_code) {
+  msg = std::string("Unable to deserialize field with unknown extended code: ");
+  msg.append(unknown_extended_code);
 }

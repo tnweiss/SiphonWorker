@@ -5,7 +5,7 @@
 #ifndef SIPHON_SRC_COMMON_DATA_DATA_MODEL_FIELD_FLOAT_H_
 #define SIPHON_SRC_COMMON_DATA_DATA_MODEL_FIELD_FLOAT_H_
 
-#include "data_model_field.h"
+#include "../data_model_field.h"
 #include <string>
 
 static const char*     FIELD_FLOAT_CODE_EXTENDED = "FLOAT";

@@ -4,6 +4,7 @@
 #include "data_model_field.h"
 #include "boost/format.hpp"
 #include <iostream>
+#include <cstring>
 
 
 const char *DataModelField::name() {

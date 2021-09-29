@@ -5,8 +5,8 @@
 #ifndef SIPHON_SRC_COMMON_DATA_DATA_MODEL_SER_DES_H_
 #define SIPHON_SRC_COMMON_DATA_DATA_MODEL_SER_DES_H_
 
-#include "exceptions.h"
-#include "data_model_field.h"
+#include "../exceptions.h"
+#include "../data_model_field.h"
 
 #include "field_int.h"
 #include "field_float.h"

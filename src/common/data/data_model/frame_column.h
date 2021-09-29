@@ -1,0 +1,12 @@
+//
+// Created by tyler on 9/28/21.
+//
+
+#ifndef SIPHON_SRC_COMMON_DATA_DATA_MODEL_FRAME_COLUMN_H_
+#define SIPHON_SRC_COMMON_DATA_DATA_MODEL_FRAME_COLUMN_H_
+
+class FrameColumn {
+
+};
+
+#endif //SIPHON_SRC_COMMON_DATA_DATA_MODEL_FRAME_COLUMN_H_
