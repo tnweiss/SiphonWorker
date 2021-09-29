@@ -1,0 +1,12 @@
+//
+// Created by tyler on 9/28/21.
+//
+
+#ifndef SIPHON_SRC_COMMON_DATA_FRAME_SIPHON_SIPHON_FRAME_H_
+#define SIPHON_SRC_COMMON_DATA_FRAME_SIPHON_SIPHON_FRAME_H_
+
+class siphon_frame {
+
+};
+
+#endif //SIPHON_SRC_COMMON_DATA_FRAME_SIPHON_SIPHON_FRAME_H_

@@ -15,6 +15,11 @@ ADD_LIBRARY( siphon_data
         ####### Frames #######
         frame/frame.h
 
+        frame/siphon/siphon_type.cpp
+        frame/siphon/siphon_frame.cpp
+        frame/siphon/exceptions.cpp
+        frame/siphon/types/int_type.cpp
+
         ####### Readers #######
         reader/reader.h
 
