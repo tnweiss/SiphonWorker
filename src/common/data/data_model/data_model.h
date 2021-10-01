@@ -65,7 +65,7 @@ public:
    *   field more efficiently
    * @return
    */
-  size_t frame_accessor_id(const char*);
+  std::string frame_accessor(const char*);
 
 private:
   std::vector<DataModelField*>* _fields;

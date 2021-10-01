@@ -94,12 +94,15 @@ const char *DataModel::model_type_extended() const {
   throw siphon::UnknownDataModelCodeException(_type);
 }
 
-size_t DataModel::frame_accessor_id(const char * field) {
+std::string DataModel::frame_accessor(const char * field) {
   // if the current model is an array we will return an index
   if (_type == DATA_MODEL_CODE_ARRAY) {
+    std::string r_val(sizeof(size_t), '\0');
+
     for (size_t i=0; i<_fields->size(); i++) {
       if (strcmp(_fields->at(i)->name(), field) == 0) {
-        return i;
+        *((size_t*)r_val.c_str()) = i;
+        return r_val;
       }
     }
 

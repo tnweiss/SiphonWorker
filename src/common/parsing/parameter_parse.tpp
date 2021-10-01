@@ -61,7 +61,7 @@ namespace siphon {
 
         // if the value can not be cast throw an exception
         if (!cast_val.has_value()) {
-            std::string error = (boost::format("Unable to parse '%1%' to SiphonType") % _type).str();
+            std::string error = (boost::format("Unable to parse '%1%' to DataType") % _type).str();
             throw siphon::ParseException(error); 
         }
         return cast_val.value();
@@ -137,7 +137,7 @@ namespace siphon {
 
         // if the value can not be cast throw an exception
         if (!cast_val.has_value()) {
-            std::string error = (boost::format("Unable to parse '%1%' to SiphonType") % _type).str();
+            std::string error = (boost::format("Unable to parse '%1%' to DataType") % _type).str();
             throw siphon::ParseException(error); 
         }
         return cast_val.value();

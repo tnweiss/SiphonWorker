@@ -13,11 +13,11 @@ ADD_LIBRARY( siphon_data
         deserializer/data_model_des.cpp
 
         ####### Frames #######
-        frame/frame.h
+        frame/data_type.cpp
+        frame/data_type_arithmetic.cpp
 
-        frame/siphon/siphon_type.cpp
-        frame/siphon/siphon_frame.cpp
         frame/siphon/exceptions.cpp
+        frame/siphon/siphon_frame_array.cpp
         frame/siphon/types/int_type.cpp
 
         ####### Readers #######
