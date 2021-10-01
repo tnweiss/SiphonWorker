@@ -1,4 +1,4 @@
-ADD_LIBRARY( siphon_data
+ADD_LIBRARY( siphon_data STATIC
         ####### Data Model #######
         data_model/fields/field_int.cpp
         data_model/fields/field_float.cpp
@@ -8,11 +8,7 @@ ADD_LIBRARY( siphon_data
         data_model/data_model.cpp
         data_model/data_model_field.cpp
 
-        ####### Deserializers #######
-        deserializer/deserializer.h
-        deserializer/data_model_des.cpp
-
-        ####### Frames #######
+        ####### Frame #######
         frame/data_type.cpp
         frame/data_type_arithmetic.cpp
 
@@ -20,14 +16,9 @@ ADD_LIBRARY( siphon_data
         frame/siphon/siphon_frame_array.cpp
         frame/siphon/types/int_type.cpp
 
-        ####### Readers #######
-        reader/reader.h
+        ####### Frame Set #######
+        frame_set/frame_set.h
 
-        ####### Serializers #######
-        serializer/serializer.h
-
-        ####### Writers #######
-        writer/writer.h
         )
 
 target_include_directories(siphon_data PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")

@@ -1,3 +1,7 @@
+########## Siphon ##########
+
+##### Common Libraries #####
 add_subdirectory(common)
-#add_subdirectory(processors)
+
+##### Siphon Tests #####
 add_subdirectory(test)

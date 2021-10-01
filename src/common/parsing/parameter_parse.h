@@ -8,7 +8,7 @@
 #include "nlohmann/json.hpp"
 
 #include "siphon_strings.hpp"
-#include "parsing/parse_exception.hpp"
+#include "parse_exception.hpp"
 
 #ifndef SIPHON_PARAMETER_PARSE_H
 #define SIPHON_PARAMETER_PARSE_H

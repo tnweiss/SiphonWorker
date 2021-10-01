@@ -11,13 +11,14 @@
 
 #include <vector>
 
-class SiphonFrameArray: Frame {
+class SiphonFrameArray: public Frame {
   SiphonFrameArray(DataModel*, size_t*, int8_t*);
+  ~SiphonFrameArray();
 
-
+  DataType* get_(std::string&);
  private:
   const DataModel* _data_model;
-  size_t* const data_size;
+  size_t* const _data_size;
   std::vector<DataType*>* const _data;
 };
 

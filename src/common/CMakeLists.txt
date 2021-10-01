@@ -1,25 +1,16 @@
-ADD_LIBRARY( siphon_common
-        siphon_strings.hpp
+########## Common Libraries ##########
 
-        parsing/parse_exception.hpp
-        parsing/parameter_parse.h
-        parsing/parameter_parse.tpp
-        parsing/parameter_parse.cpp
-
-        models/data_model_field.h
-        models/data_model_field.cpp
-        models/data_model.h
-        models/data_model.cpp
-#        models/frame.cpp
-#        models/frame.h
-
-        processing/parser.hpp
-        processing/processor.hpp
-
-        processing/filters/processors/gt.cpp
-        processing/filters/parsers/gt_parser.cpp
-        )
-
-target_include_directories(siphon_common PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
-
+##### Data Library - frames & data models #####
 add_subdirectory(data)
+
+##### Parsing Library - json parsing for deserializing processors #####
+add_subdirectory(parsing)
+
+##### Processing Library - json parsing for deserializing processors #####
+add_subdirectory(processing)
+
+##### Readers Library - used to read bytes from external stores #####
+add_subdirectory(reader)
+
+##### Writer Library - writing bytes to external stores #####
+add_subdirectory(writer)

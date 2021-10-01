@@ -15,9 +15,9 @@ TEST_CASE( "TestIntField", "[common][data][data_model]" ) {
   std::unique_ptr<DataType> st2 = std::make_unique<IntType>(data2.get());
 
 
-  auto t = (*st + *st + 9 / 7.9);
-  REQUIRE(t->as_int() == 18);
-  int y = 0;
+  //auto t = (*st + *st + 9 / 7.9);
+  //REQUIRE(t->as_int() == 18);
+  //int y = 0;
 //
 //
 //  REQUIRE(st2->as_int() == 18);

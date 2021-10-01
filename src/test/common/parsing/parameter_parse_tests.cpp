@@ -2,9 +2,9 @@
 #include <vector>
 #include "catch2.hpp"
 
-#include "../data.hpp"
-#include "parsing/parse_exception.hpp"
-#include "parsing/parameter_parse.h"
+#include "data.hpp"
+#include "parse_exception.hpp"
+#include "parameter_parse.h"
 
 
 TEST_CASE( "TestValidateType", "[common][parameterParse]" ) {
