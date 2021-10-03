@@ -5,7 +5,7 @@
 #ifndef SIPHON_SRC_COMMON_DATA_FRAME_SIPHON_SIPHON_TYPE_ARITHMETIC_H_
 #define SIPHON_SRC_COMMON_DATA_FRAME_SIPHON_SIPHON_TYPE_ARITHMETIC_H_
 
-#include "frame/data_type.h"
+#include "data_type.h"
 #include<memory>
 
 //////////////////////////////// Priority Helper ////////////////////////////////

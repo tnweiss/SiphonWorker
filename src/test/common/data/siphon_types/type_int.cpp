@@ -3,8 +3,8 @@
 //
 #include "catch2.hpp"
 
-#include "frame/siphon/types/int_type.h"
-#include "frame/data_type_arithmetic.h"
+#include "../../../../common/frame/data_type.h"
+#include "../../../../common/frame/siphon/types/int_type.h"
 
 
 TEST_CASE( "TestIntField", "[common][data][data_model]" ) {

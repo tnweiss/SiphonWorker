@@ -16,3 +16,7 @@ SiphonFrameArray::~SiphonFrameArray() {
 DataType *SiphonFrameArray::get_(std::string & key) {
   return _data->at(*(size_t*)key.c_str());
 }
+
+std::string to_string() {
+  return "";
+}

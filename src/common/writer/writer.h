@@ -8,7 +8,8 @@
 namespace siphon {
 
 class Writer {
-  virtual void write(void*, size_t) = 0;
+public:
+  virtual void write(int8_t*, size_t) = 0;
 };
 
 }

@@ -3,8 +3,8 @@
 //
 
 #include "data_model.h"
-#include "data_model/fields/ser_des.h"
 #include "exceptions.h"
+#include "fields/ser_des.h"
 #include <cstring>
 
 DataModel::DataModel(int8_t type) {

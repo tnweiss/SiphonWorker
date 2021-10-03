@@ -8,11 +8,19 @@
 #include "data_type.h"
 
 class Frame {
+public:
   /**
    * Get the data provided the accessor key
    * @return
    */
   virtual DataType* get_(std::string&) = 0;
+
+  /**
+   * Prints String representation of the frame
+   */
+  virtual std::string to_string() = 0;
+
+  virtual ~Frame() = 0;
 
 //  /**
 //   * Update existing value

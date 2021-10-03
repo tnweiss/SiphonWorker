@@ -5,7 +5,7 @@
 #ifndef SIPHON_SRC_COMMON_DATA_FRAME_SIPHON_TYPES_INT_TYPE_H_
 #define SIPHON_SRC_COMMON_DATA_FRAME_SIPHON_TYPES_INT_TYPE_H_
 
-#include "frame/data_type.h"
+#include "../../data_type.h"
 #include <memory>
 
 static const size_t INT_SIZE = sizeof(int);

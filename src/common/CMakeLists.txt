@@ -1,7 +1,13 @@
 ########## Common Libraries ##########
 
-##### Data Library - frames & data models #####
-add_subdirectory(data)
+##### Data Model - Data Definitions #####
+add_subdirectory(data_model)
+
+##### Frame Library - class for data framse serdes #####
+add_subdirectory(frame)
+
+##### Frame Collection Library - class for data framse serdes #####
+add_subdirectory(frame_collection)
 
 ##### Parsing Library - json parsing for deserializing processors #####
 add_subdirectory(parsing)

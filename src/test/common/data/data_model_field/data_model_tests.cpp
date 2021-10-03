@@ -3,7 +3,7 @@
 //
 #include "catch2.hpp"
 
-#include "data_model/data_model.h"
+#include "data_model.h"
 
 TEST_CASE( "DataModelTest", "[common][data][data_model]" ) {
   ////////////// construct test in_data //////////////

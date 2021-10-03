@@ -1,6 +1,6 @@
 #include "catch2.hpp"
-
-#include "data_model/fields/field_int.h"
+#include <data_model_field.h>
+#include <fields/field_int.h>
 
 TEST_CASE( "TestIntField", "[common][data][data_model]" ) {
   ////////////// construct test in_data //////////////

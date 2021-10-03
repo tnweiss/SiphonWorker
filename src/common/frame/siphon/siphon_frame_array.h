@@ -12,10 +12,18 @@
 #include <vector>
 
 class SiphonFrameArray: public Frame {
-  SiphonFrameArray(DataModel*, size_t*, int8_t*);
+public:
+  /**
+   *
+   * @param data_model
+   * @param data_size
+   * @param buffer
+   */
+  SiphonFrameArray(DataModel* data_model, size_t* data_size, int8_t* buffer);
   ~SiphonFrameArray();
 
   DataType* get_(std::string&);
+  std::string to_string();
  private:
   const DataModel* _data_model;
   size_t* const _data_size;

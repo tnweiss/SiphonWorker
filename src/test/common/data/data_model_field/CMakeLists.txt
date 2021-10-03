@@ -8,4 +8,4 @@ add_executable(dataModelFieldTest
 target_precompile_headers(dataModelFieldTest
         PUBLIC common_lib.h
         PUBLIC field_data.hpp)
-target_link_libraries(dataModelFieldTest PRIVATE siphon_data)
+target_link_libraries(dataModelFieldTest PUBLIC siphon_data_model)

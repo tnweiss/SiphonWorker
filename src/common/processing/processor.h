@@ -4,7 +4,7 @@
 #ifndef SIPHON_SRC_VALUEFILTER_VALUE_FILTER_H_
 #define SIPHON_SRC_VALUEFILTER_VALUE_FILTER_H_
 
-#include "frame/frame.h"
+#include "../frame/frame.h"
 
 
 namespace siphon {
@@ -16,6 +16,12 @@ class Processor {
    * @return
    */
   virtual bool process(Frame*) = 0;
+
+  /**
+   * Prints a string representation of the processor
+   * @return
+   */
+  virtual std::string to_string() = 0;
 };
 
 }

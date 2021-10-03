@@ -5,9 +5,9 @@
 #ifndef SIPHON_SRC_COMMON_DATA_FRAME_SIPHON_SIPHON_TYPE_H_
 #define SIPHON_SRC_COMMON_DATA_FRAME_SIPHON_SIPHON_TYPE_H_
 
-#include "frame/siphon/exceptions.h"
-#include <string>
+#include "siphon/exceptions.h"
 #include <memory>
+#include <string>
 #include <type_traits>
 
 const static int TYPE_SHORT_CODE = 1;
