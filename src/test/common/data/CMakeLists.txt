@@ -1,2 +1,0 @@
-add_subdirectory(data_model_field)
-add_subdirectory(siphon_types)

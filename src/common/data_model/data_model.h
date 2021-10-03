@@ -10,17 +10,17 @@
 
 #include "data_model_field.h"
 
+namespace siphon {
+
 static const int8_t DATA_MODEL_CODE_ARRAY = 1;
-static const char* DATA_MODEL_CODE_EXTENDED_ARRAY = "Array";
+static const char *DATA_MODEL_CODE_EXTENDED_ARRAY = "Array";
 
 static const int8_t DATA_MODEL_CODE_OBJECT = 2;
-static const char* DATA_MODEL_CODE_EXTENDED_OBJECT = "Object";
+static const char *DATA_MODEL_CODE_EXTENDED_OBJECT = "Object";
 
-static const std::pair<int8_t, const char*> DM_TYPES[] = {
+static const std::pair<int8_t, const char *> DM_TYPES[] = {
     {DATA_MODEL_CODE_ARRAY, DATA_MODEL_CODE_EXTENDED_ARRAY},
-    {DATA_MODEL_CODE_OBJECT, DATA_MODEL_CODE_EXTENDED_OBJECT}
-};
-
+    {DATA_MODEL_CODE_OBJECT, DATA_MODEL_CODE_EXTENDED_OBJECT}};
 
 class DataModel {
 public:
@@ -32,7 +32,7 @@ public:
   /**
    * Initialize Data Model with a model type extended
    */
-  explicit DataModel(const char*);
+  explicit DataModel(const char *);
 
   /**
    * Initialize data model from buffer.
@@ -41,7 +41,7 @@ public:
    * Bytes 1-2: Number of fields
    * Bytes 3- : field data
    */
-  explicit DataModel(int8_t*);
+  explicit DataModel(int8_t *);
 
   /**
    * Destructor for the data model
@@ -58,19 +58,25 @@ public:
    * Get the extended model type (string)
    * @return
    */
-  [[nodiscard]] const char* model_type_extended() const;
+  [[nodiscard]] const char *model_type_extended() const;
 
   /**
    * Used to get an integer that can be used to get the requested
    *   field more efficiently
    * @return
    */
-  std::string frame_accessor(const char*);
+  std::string frame_accessor(const char *);
+
+  /**
+   * Used to compare data models for equality
+   * @return
+   */
+  bool operator==(DataModel &);
 
 private:
-  std::vector<DataModelField*>* _fields;
+  std::vector<DataModelField *> *_fields;
   int8_t _type;
-
 };
+}
 
 #endif // SIPHON_SRC_COMMON_DATA_DATA_MODEL_DATA_MODEL_H_

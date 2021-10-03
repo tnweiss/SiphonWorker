@@ -2,7 +2,7 @@ ADD_LIBRARY( siphon_data_model STATIC
         ####### Data Model #######
         data_model.cpp
         data_model_field.cpp
-        exceptions.cpp
+        data_model_exceptions.cpp
 
         fields/field_float.cpp
         fields/field_int.cpp

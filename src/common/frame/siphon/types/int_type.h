@@ -11,6 +11,9 @@
 static const size_t INT_SIZE = sizeof(int);
 
 
+/**
+ * This class does not manage the memory it is instantiated with
+ */
 class IntType: public DataType {
  public:
   /////////////////// Overrides ///////////////////
@@ -49,13 +52,25 @@ class IntType: public DataType {
   int* as_int_ptr() final;
 
   /////////////////// Constructor / Destructor ///////////////////
-  explicit IntType(int);
   explicit IntType(int*, size_t&);
   explicit IntType(int*);
   ~IntType();
 
+protected:
+  const int* data();
+
  private:
   int* const _data;
+};
+
+/**
+ * This class will manage the memory it is instantiated with
+ */
+class IntTypeN: public IntType {
+public:
+  /////////////////// Constructor / Destructor ///////////////////
+  explicit IntTypeN(int);
+  ~IntTypeN();
 };
 
 #endif //SIPHON_SRC_COMMON_DATA_FRAME_SIPHON_TYPES_INT_TYPE_H_

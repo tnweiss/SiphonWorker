@@ -4,6 +4,8 @@
 
 #include "field_float.h"
 
+namespace siphon {
+
 int8_t FloatField::code() {
   return FIELD_FLOAT_CODE;
 }
@@ -15,3 +17,6 @@ const char *FloatField::extended_code() {
 size_t FloatField::bytes() {
   return FIELD_FLOAT_BYTES;
 }
+
+}
+

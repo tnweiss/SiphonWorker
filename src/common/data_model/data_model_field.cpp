@@ -6,23 +6,12 @@
 #include <iostream>
 #include <cstring>
 
+namespace siphon {
 
-const char *DataModelField::name() {
-  return _name;
-}
+///////////////////////////// Common Methods /////////////////////////////
+const char *DataModelField::description() { return _description; }
 
-DataModelField::DataModelField(int8_t *buffer, size_t &offset) {
-  _header = new int8_t [DMF_HEADER_LEN];
-  memcpy(_header, buffer, DMF_HEADER_LEN);
-
-  buffer += DMF_HEADER_LEN;
-  _name_len = strlen((char*)buffer) + 1;
-
-  _name = new char[DMF_HEADER_LEN];
-  memcpy(_name, buffer, _name_len);
-
-  offset += DMF_HEADER_LEN + _name_len;
-}
+const char *DataModelField::name() { return _name; }
 
 void DataModelField::write_to_buffer(int8_t *buffer, size_t &offset) {
   memcpy(buffer, _header, DMF_HEADER_LEN);
@@ -30,12 +19,34 @@ void DataModelField::write_to_buffer(int8_t *buffer, size_t &offset) {
   offset += DMF_HEADER_LEN + _name_len;
 }
 
+///////////////////////////// Constructors /////////////////////////////
+
+DataModelField::DataModelField(int8_t *buffer, size_t &offset) {
+  _header = new int8_t[DMF_HEADER_LEN];
+  memcpy(_header, buffer, DMF_HEADER_LEN);
+
+  buffer += DMF_HEADER_LEN;
+  _name_len = strlen((char *)buffer) + 1;
+
+  _name = new char[_name_len];
+  memcpy(_name, buffer, _name_len);
+
+  buffer += _name_len;
+  _description_len = strlen((char *)buffer) + 1;
+
+  _description = new char[_description_len];
+  memcpy(_description, buffer, _description_len);
+
+  offset += DMF_HEADER_LEN + _name_len + _description_len;
+}
+
 DataModelField::~DataModelField() {
   delete[] _header;
   delete[] _name;
+  delete[] _description;
 }
 
-DataModelField::DataModelField(const DataModelField& other) {
+DataModelField::DataModelField(const DataModelField &other) {
   _name = nullptr;
   _header = nullptr;
   _name_len = 0;
@@ -43,7 +54,7 @@ DataModelField::DataModelField(const DataModelField& other) {
   exit(1);
 }
 
-DataModelField::DataModelField(DataModelField&& other) noexcept {
+DataModelField::DataModelField(DataModelField &&other) noexcept {
   _name = other._name;
   _name_len = other._name_len;
   _header = other._header;
@@ -64,7 +75,8 @@ DataModelField &DataModelField::operator=(const DataModelField &other) {
   return *this;
 }
 
-DataModelField &DataModelField::operator=(DataModelField &&other) noexcept {
+DataModelField &
+DataModelField::operator=(DataModelField &&other) noexcept {
   _name = other._name;
   _header = other._header;
   _name_len = other._name_len;
@@ -73,7 +85,8 @@ DataModelField &DataModelField::operator=(DataModelField &&other) noexcept {
   return *this;
 }
 
-DataModelField::DataModelField(char* name, const int8_t header[]) {
+DataModelField::DataModelField(char *name, char *description,
+                               const int8_t header[]) {
   _header = new int8_t[DMF_HEADER_LEN];
   memcpy(_header, header, DMF_HEADER_LEN);
 
@@ -81,4 +94,11 @@ DataModelField::DataModelField(char* name, const int8_t header[]) {
 
   _name = new char[_name_len];
   memcpy(_name, name, _name_len);
+
+  _description_len = strlen(description) + 1;
+
+  _description = new char[_description_len];
+  memcpy(_description, description, _description_len);
+}
+
 }

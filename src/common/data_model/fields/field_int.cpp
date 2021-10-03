@@ -3,14 +3,12 @@
 //
 #include "field_int.h"
 
-int8_t IntField::code() {
-  return FIELD_INT_CODE;
-}
+namespace siphon {
 
-const char* IntField::extended_code() {
-  return FIELD_INT_CODE_EXTENDED;
-}
+int8_t IntField::code() { return FIELD_INT_CODE; }
 
-size_t IntField::bytes() {
-  return FIELD_INT_BYTES;
+const char *IntField::extended_code() { return FIELD_INT_CODE_EXTENDED; }
+
+size_t IntField::bytes() { return FIELD_INT_BYTES; }
+
 }

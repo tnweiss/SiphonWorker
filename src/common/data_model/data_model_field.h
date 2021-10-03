@@ -8,6 +8,8 @@
 #include <stdexcept>
 #include <string>
 
+namespace siphon {
+
 /**
  * Data Model Field identifier length
  * byte 0 = the field code
@@ -15,9 +17,9 @@
  */
 const int8_t DMF_HEADER_LEN = 5;
 
-
 class DataModelField {
 public:
+  ///////////////////////////// Interface Methods /////////////////////////////
   /**
    * Returns the size of the field in bytes
    * @return
@@ -34,68 +36,78 @@ public:
    * returns the string representation of the field
    * @return
    */
-  virtual const char* extended_code() = 0;
+  virtual const char *extended_code() = 0;
+
+  ///////////////////////////// Common Methods /////////////////////////////
+  /**
+   * the name of the field
+   * @return
+   */
+  const char *name();
 
   /**
    * the name of the field
    * @return
    */
-  const char* name();
+  const char *description();
+
+  /**
+     * Write the field to a buffer
+   */
+  void write_to_buffer(int8_t *, size_t &);
+
+  ///////////////////////////// Constructors /////////////////////////////
+  /**
+   * default constructor
+   */
+  DataModelField(int8_t *, size_t &);
 
   /**
    * default constructor
    */
-   DataModelField(int8_t*, size_t&);
+  DataModelField(char *, char *, const int8_t[DMF_HEADER_LEN]);
 
-   /**
-   * default constructor
-    */
-   DataModelField(char*, const int8_t[DMF_HEADER_LEN]);
-
-    /**
-     * Write the field to a buffer
-     */
-    void write_to_buffer(int8_t*, size_t&);
-
-    /**
+  /**
      * Delete the constructed data
-     */
-    virtual ~DataModelField();
+   */
+  virtual ~DataModelField();
 
-    /**
+  /**
      * Copy Constructor
      * @param other
      * @return
-     */
-    DataModelField(const DataModelField& other);
+   */
+  DataModelField(const DataModelField &other);
 
-    /**
+  /**
      * Move Constructor
      * @param other
-     */
-    DataModelField(DataModelField&& other) noexcept ;
+   */
+  DataModelField(DataModelField &&other) noexcept;
 
-    /**
+  /**
      * Copy Assignment
      * @param other
      * @return
-     */
-    DataModelField& operator=(const DataModelField& other);
+   */
+  DataModelField &operator=(const DataModelField &other);
 
-    /**
+  /**
      * Move Assignment
      * @param other
      * @return
-     */
-    DataModelField& operator=(DataModelField&& other) noexcept;
+   */
+  DataModelField &operator=(DataModelField &&other) noexcept;
 
-  protected:
-   int8_t* _header;
+protected:
+  int8_t *_header;
 
 private:
   size_t _name_len;
-  char* _name;
-
+  char *_name;
+  char *_description;
+  size_t _description_len;
 };
+}
 
 #endif // SIPHON_SRC_COMMON_DATA_DATA_MODEL_FIELD_DATA_MODEL_FIELD_H_

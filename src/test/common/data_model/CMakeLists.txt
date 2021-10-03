@@ -1,7 +1,7 @@
 add_executable(dataModelFieldTest
         main.cpp
 
-        field_int_tests.cpp
+        fields_tests.cpp
         common_lib.h
         field_data.hpp data_model_tests.cpp)
 

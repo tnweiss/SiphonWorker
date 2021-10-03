@@ -6,17 +6,13 @@
 
 
 /////////////////// Constructor / Destructor ///////////////////
-IntType::IntType(int data): _data(new int(data)) { }
-
 IntType::IntType(int *data, size_t &offset): _data(data) {
   offset += INT_SIZE;
 }
 
 IntType::IntType(int *data): _data(data) { }
 
-IntType::~IntType() {
-  delete _data;
-}
+IntType::~IntType() = default;
 
 /////////////////// Overrrides ///////////////////
 
@@ -29,7 +25,7 @@ const char *IntType::type_code_extended() {
 }
 
 DataType *IntType::replicate() {
-  return new IntType(*_data);
+  return new IntTypeN(*_data);
 }
 
 int8_t IntType::precision() {
@@ -208,4 +204,14 @@ IntType &IntType::operator-=(short data) {
   return *this;
 }
 
+const int *IntType::data() {
+  return _data;
+}
 
+IntTypeN::IntTypeN(int data): IntType(new int(data)) {
+
+}
+
+IntTypeN::~IntTypeN() {
+  delete data();
+}

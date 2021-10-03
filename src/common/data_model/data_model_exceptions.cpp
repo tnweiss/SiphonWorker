@@ -2,7 +2,7 @@
 // Created by Tyler on 9/28/2021.
 //
 
-#include "exceptions.h"
+#include "data_model_exceptions.h"
 #include <cstdarg>
 
 siphon::DataModelParseException::DataModelParseException(const char* msg...) {
